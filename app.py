@@ -174,7 +174,3 @@ elif active_mod == "💰 Airdrop":
 
 st.divider()
 st.markdown('<p style="text-align:center; color:#4caf50; font-size:0.7rem;">VILLAGE MINING AI v3.7 • DELUXE EDITION</p>', unsafe_allow_html=True)
-
-**ముఖ్యమైన విషయం:** GitHub లో అప్‌డేట్ చేసాక, మీ టెలిగ్రామ్ లింక్ ఓపెన్ చేసి **Reload** చేయండి. **`🎁 Mystery Box`** ట్యాబ్ లోకి వెళ్లి ఆ మ్యాజిక్ ని చూడండి. ఆ గిఫ్ట్ బాక్స్ లో నుండి కాయిన్స్ వర్షం కురిసే లుక్ మీకు పక్కాగా నచ్చుతుంది!
-
-ముందుకు వెళ్దాం మూర్తి గారు! 🌾🔥 మీ ఫీడ్ బ్యాక్ కోసం వెయిట్ చేస్తున్నాను.
