@@ -5,7 +5,7 @@ from datetime import datetime
 # --- APP CONFIG ---
 st.set_page_config(page_title="Village Mining AI", page_icon="🌾", layout="centered")
 
-# --- ADVANCED EXTRAORDINARY CSS WITH INTERACTIVE GLOW ---
+# --- CUSTOM PLATINUM CSS ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@400;700&display=swap');
@@ -39,7 +39,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- REAL-TIME DATABASE ENGINE ---
+# --- DATABASE ENGINE ---
 conn = sqlite3.connect("village_empire.db", check_same_thread=False)
 db = conn.cursor()
 db.execute("CREATE TABLE IF NOT EXISTS users (id TEXT PRIMARY KEY, coins INTEGER, pph INTEGER, level INTEGER)")
@@ -55,15 +55,19 @@ if not row:
 else:
     coins, pph, level = row
 
-# Calculate level dynamically based on total capacity
-calculated_level = 1 + (coins // 10000)
-if calculated_level != level:
-    level = calculated_level
-    db.execute("UPDATE users SET level = ? WHERE id = ?", (level, user_id))
-    conn.commit()
+# --- DYNAMIC TARGETS & LEVELING ---
+# Define how many coins are needed per level target
+COINS_PER_LEVEL = 10000 
+level = 1 + (coins // COINS_PER_LEVEL)
+next_level_target = level * COINS_PER_LEVEL
+coins_needed_for_next_level = next_level_target - coins
+
+db.execute("UPDATE users SET level = ? WHERE id = ?", (level, user_id))
+conn.commit()
 
 # --- INTERACTIVE APP INTERFACE ---
 
+# Top Metrics Row
 st.markdown(f"""
     <div class="stats-container">
         <div class="stat-box"><div class="stat-label">PROFIT PER HOUR</div><div class="stat-val">+{pph:,}</div></div>
@@ -73,15 +77,15 @@ st.markdown(f"""
 
 st.markdown(f'<div class="main-coin-display">🪙 {coins:,}</div>', unsafe_allow_html=True)
 
-# Operational Level Progress Bar
-progress_percent = min(100, int((coins % 10000) / 100))
+# Operational Level Progress Bar Calculations
+progress_percent = int(((coins % COINS_PER_LEVEL) / COINS_PER_LEVEL) * 100)
 st.markdown(f'<div class="progress-bar-bg"><div class="progress-bar-fill" style="width: {progress_percent}%;"></div></div>', unsafe_allow_html=True)
-st.caption(f"Level {level} Tycoon • Progress to Next Level: {progress_percent}%")
+st.markdown(f"<p style='text-align:center; color:#81c784; font-size:0.9rem;'>🎯 <b>{coins_needed_for_next_level:,} Coins remaining</b> to unlock Level {level + 1} Tycoon</p>", unsafe_allow_html=True)
 
-# Main Interactive Harvest Button Area
+# Main Harvest Interactive Button
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
-    st.image("https://cdn-icons-png.flaticon.com/512/2424/2424750.png", width=160)
+    st.image("https://cdn-icons-png.flaticon.com/512/2424/2424750.png", width=150)
     if st.button("🚜 HARVEST RICE (TAP) 🚜", use_container_width=True):
         coins += (10 * level)
         db.execute("UPDATE users SET coins = ? WHERE id = ?", (coins, user_id))
@@ -90,51 +94,54 @@ with col2:
 
 st.divider()
 
-# Interactive Menu Tabs
+# Interactive Application Menu Tabs
 t1, t2, t3, t4 = st.tabs(["🛒 Upgrade Shop", "📋 Quests", "🏆 Leaderboard", "💰 Drop"])
 
 with t1:
     st.markdown("### Accelerate Production")
     
     # Item 1: Premium Seeds
-    st.markdown("""
+    seed_cost = 500
+    st.markdown(f"""
         <div class="upgrade-card">
             <div><div class="upgrade-title">Premium Hybrid Seeds</div><div class="upgrade-desc">+100 Profit Per Hour</div></div>
-            <div class="upgrade-cost">🪙 500</div>
+            <div class="upgrade-cost">🪙 {seed_cost:,}</div>
         </div>
     """, unsafe_allow_html=True)
     if st.button("Purchase Seeds", use_container_width=True):
-        if coins >= 500:
-            coins -= 500
+        if coins >= seed_cost:
+            coins -= seed_cost
             pph += 100
             db.execute("UPDATE users SET coins = ?, pph = ? WHERE id = ?", (coins, pph, user_id))
             conn.commit()
             st.toast("Seeds successfully planted!", icon="🌱")
             st.rerun()
         else:
-            st.error("Insufficient coin balances for this upgrade.")
+            shortfall = seed_cost - coins
+            st.error(f"❌ Insufficient balance! You need **{shortfall:,} more coins** to buy this.")
 
     # Item 2: Automatic Irrigation
-    st.markdown("""
+    pump_cost = 2500
+    st.markdown(f"""
         <div class="upgrade-card">
             <div><div class="upgrade-title">Solar Irrigation Pumps</div><div class="upgrade-desc">+500 Profit Per Hour</div></div>
-            <div class="upgrade-cost">🪙 2,500</div>
+            <div class="upgrade-cost">🪙 {pump_cost:,}</div>
         </div>
     """, unsafe_allow_html=True)
     if st.button("Install Irrigation", use_container_width=True):
-        if coins >= 2500:
-            coins -= 2500
+        if coins >= pump_cost:
+            coins -= pump_cost
             pph += 500
             db.execute("UPDATE users SET coins = ?, pph = ? WHERE id = ?", (coins, pph, user_id))
             conn.commit()
             st.toast("Irrigation grids online!", icon="⚡")
             st.rerun()
         else:
-            st.error("Insufficient coin balances for this upgrade.")
+            shortfall = pump_cost - coins
+            st.error(f"❌ Insufficient balance! You need **{shortfall:,} more coins** to install irrigation.")
 
 with t2:
     st.markdown("### Daily Campaigns")
-    st.info("Complete assignments to build your reserves quickly.")
     st.checkbox("Daily Check-in Verification (Day 1 Claimed: +5,000 Coins)", value=True, disabled=True)
     if st.button("▶️ Stream Sponsored Stream (+1,000 Coins)"):
         coins += 1000
@@ -156,4 +163,4 @@ with t4:
     st.button("🔗 Link TON Wallet (Mainnet Coming Soon)", disabled=True)
 
 st.divider()
-st.markdown('<p style="text-align:center; color:#4caf50; font-size:0.75rem; font-weight:bold;">VILLAGE MINING AI v3.0 • PLATINUM EDITION</p>', unsafe_allow_html=True)
+st.markdown('<p style="text-align:center; color:#4caf50; font-size:0.75rem; font-weight:bold;">VILLAGE MINING AI v3.1 • PLATINUM PRECISION EDITION</p>', unsafe_allow_html=True)
