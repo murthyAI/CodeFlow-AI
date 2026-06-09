@@ -13,10 +13,10 @@ st.markdown("""
     .ad-box { background-color: #2d2d2d; border: 1px dashed #555; padding: 15px; text-align: center; border-radius: 10px; color: #aaa; font-size: 0.9rem; margin-top: 30px; }
     .share-box { background-color: #152238; border: 1px solid #007bff; padding: 15px; border-radius: 10px; margin-top: 20px; color: #fff; }
     </style>
-""", unsafe_allow_index=True)
+""", unsafe_allow_html=True)
 
-# Title
-st.markdown("<div class='main-title'>🪙 CYBER-TAP AI</div>", unsafe_allow_index=True)
+# Title'>🪙 CYBER-TAP AI</div>", unsafe_allow_html=True)
+st.markdown("<div class='main-title'
 st.markdown("<div class='subtitle'>Next-Generation Tap-to-Earn Mining Platform</div>", unsafe_allow_index=True)
 
 # Initialize Session States for Score
