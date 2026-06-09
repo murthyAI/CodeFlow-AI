@@ -1,58 +1,52 @@
+
 import streamlit as st
-import requests
 
-# Configure OpenAI API Key (Replace with your active API key or set as environment variable)
-API_KEY = "YOUR_OPENAI_API_KEY"
-URL = "https://api.openai.com/v1/chat/completions"
+# Page configuration
+st.set_page_config(page_title="CyberTap AI - Mining Game", page_icon="🪙", layout="centered")
 
-# App Title and Description
-st.set_page_config(page_title="CodeFlow AI - Code Tester & Reviewer", page_icon="🚀", layout="centered")
-st.title("🚀 CodeFlow AI")
-st.subheader("Automated Code Tester & Reviewer")
-st.write("Paste your Python code below. The AI will automatically test it, find bugs, and optimize it for you!")
+# Custom CSS for beautiful styling and animations
+st.markdown("""
+    <style>
+    .main-title { text-align: center; color: #FFD700; font-size: 3rem; font-weight: bold; margin-bottom: 10px; }
+    .subtitle { text-align: center; color: #888; font-size: 1.2rem; margin-bottom: 30px; }
+    .score-box { text-align: center; background-color: #1e1e1e; padding: 20px; border-radius: 15px; border: 2px solid #FFD700; font-size: 2.5rem; font-weight: bold; color: #FFD700; margin-bottom: 20px; }
+    .ad-box { background-color: #2d2d2d; border: 1px dashed #555; padding: 15px; text-align: center; border-radius: 10px; color: #aaa; font-size: 0.9rem; margin-top: 30px; }
+    .share-box { background-color: #152238; border: 1px solid #007bff; padding: 15px; border-radius: 10px; margin-top: 20px; color: #fff; }
+    </style>
+""", unsafe_allow_index=True)
 
-# User Code Input Box
-user_code = st.text_area("Enter your Python code here:", height=250, placeholder="def my_function():\nprint('Hello World')")
+# Title
+st.markdown("<div class='main-title'>🪙 CYBER-TAP AI</div>", unsafe_allow_index=True)
+st.markdown("<div class='subtitle'>Next-Generation Tap-to-Earn Mining Platform</div>", unsafe_allow_index=True)
 
-# Analyze Button
-if st.button("Analyze Code", type="primary"):
-    if user_code.strip() != "":
-        st.info("AI is analyzing your code... Please wait a moment...")
-        
-        # Headers and Payload for direct API Call
-        headers = {
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {API_KEY}"
-        }
-        
-        payload = {
-            "model": "gpt-4o-mini",
-            "messages": [
-                {
-                    "role": "system",
-                    "content": "You are an expert Python code reviewer and tester. Provide a structured review in English with 3 clear sections: 1. Syntax Checker (issues found), 2. Auto-Bug Fixer (completely corrected code inside a markdown block), 3. Code Optimizer (efficiency and readability tips)."
-                },
-                {
-                    "role": "user",
-                    "content": f"Please analyze this code:\n```python\n{user_code}\n```"
-                }
-            ]
-        }
-        
-        try:
-            # Making the direct network call
-            response = requests.post(URL, json=payload, headers=headers)
-            response_data = response.json()
-            
-            if response.status_code == 200:
-                st.success("Analysis Complete!")
-                ai_analysis = response_data["choices"][0]["message"]["content"]
-                st.markdown(ai_analysis)
-            else:
-                error_msg = response_data.get("error", {}).get("message", "Unknown error")
-                st.error(f"API Error ({response.status_code}): {error_msg}")
-                
-        except Exception as e:
-            st.error(f"An error occurred: {e}")
-    else:
-        st.warning("Please enter some code first before analyzing!")
+# Initialize Session States for Score
+if 'coins' not in st.session_state:
+    st.session_state.coins = 0
+
+# Display Current Balance
+st.markdown(f"<div class='score-box'>💰 {st.session_state.coins:,} Coins</div>", unsafe_allow_index=True)
+
+# --- CORE FEATURE 1: THE MINING TAP BUTTON ---
+col1, col2, col3 = st.columns([1, 2, 1])
+with col2:
+    # Large Button as a Coin representation
+    if st.button("🚀 TAP TO MINE 🚀", use_container_width=True):
+        st.session_state.coins += 10  # Gives 10 coins per tap
+        st.rerun()
+
+st.divider()
+
+# --- CORE FEATURE 2: SHARE & REFERRAL SYSTEM ---
+st.markdown("### 👥 Invite Friends & Earn")
+st.markdown("<div class='share-box'><b>🎁 Bonus:</b> Share with your friends and get <b>+5,000 Coins</b> for each referral!</div>", unsafe_allow_index=True)
+
+# Mock Referral Link Creation
+referral_link = f"https://t.me/CyberTapAIBot?start=user_{123456}" # This will link to Telegram later
+st.text_input("Copy your unique referral link:", value=referral_link, readonly=True)
+
+if st.button("📢 Share on WhatsApp", use_container_width=True):
+    whatsapp_url = f"https://api.whatsapp.com/send?text=Join%20the%20next%20big%20crypto%20game%20CyberTap%20AI%20and%20start%20mining%20now!%20{referral_link}"
+    st.markdown(f'<a href="{whatsapp_url}" target="_blank" style="text-decoration:none;"><button style="width:100%; padding:10px; background-color:#25D366; color:white; border:none; border-radius:5px; font-weight:bold; cursor:pointer;">Open WhatsApp to Invite</button></a>', unsafe_allow_index=True)
+
+# --- CORE FEATURE 3: ADVERTISEMENTS PLACEHOLDER ---
+st.markdown("<div class='ad-box'>📺 <b>Sponsored Advertisement Box</b><br>Ads from Telegram/Google networks will stream here. (Revenue generates per view/click)</div>", unsafe_allow_index=True)
