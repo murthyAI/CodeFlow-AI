@@ -1,150 +1,109 @@
 import streamlit as st
 import sqlite3
-import time
 from datetime import datetime
 
-# --- CONFIGURATION ---
+# --- APP CONFIG ---
 st.set_page_config(page_title="Village Mining AI", page_icon="🌾", layout="centered")
 
-# --- STYLED CSS FOR EXTRAORDINARY UI ---
+# --- ADVANCED EXTRAORDINARY CSS ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@400;700&display=swap');
+    html, body, [class*="st-"] { font-family: 'Urbanist', sans-serif; background-color: #000000; color: #ffffff; }
+    .stApp { background: radial-gradient(circle at center, #1a2e1a 0%, #000000 100%); }
     
-    html, body, [class*="st-"] {
-        font-family: 'Urbanist', sans-serif;
-        background-color: #0e1117;
-        color: #ffffff;
+    .stats-container {
+        display: flex; justify-content: space-around; background: rgba(255,255,255,0.05);
+        padding: 15px; border-radius: 20px; border: 1px solid #4caf50; margin-bottom: 20px;
     }
-    
-    .main-header {
-        text-align: center;
-        background: linear-gradient(90deg, #1b5e20, #4caf50);
-        padding: 20px;
-        border-radius: 20px;
-        margin-bottom: 25px;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-    }
-    
-    .coin-balance {
-        font-size: 3.5rem;
-        font-weight: 700;
-        color: #ffd700;
-        text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
-    }
-    
-    .mining-section {
-        text-align: center;
-        padding: 40px 20px;
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 30px;
-        border: 1px solid #2e7d32;
-        margin-bottom: 30px;
-    }
-    
-    .tractor-btn {
-        background: none;
-        border: none;
-        cursor: pointer;
-        transition: transform 0.1s ease-in-out;
-    }
-    
-    .tractor-btn:active {
-        transform: scale(0.9);
-    }
+    .stat-box { text-align: center; }
+    .stat-val { font-size: 1.5rem; font-weight: 700; color: #ffd700; }
+    .stat-label { font-size: 0.8rem; color: #888; }
 
-    .task-card {
-        background: #1e1e1e;
-        padding: 15px;
-        border-radius: 15px;
-        border-left: 5px solid #ffd700;
-        margin-bottom: 10px;
+    .main-coin-display {
+        text-align: center; font-size: 4rem; font-weight: 800; color: #ffd700;
+        margin: 20px 0; text-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
     }
+    
+    .progress-bar-bg { background: #222; border-radius: 10px; height: 10px; width: 100%; margin: 10px 0; }
+    .progress-bar-fill { background: #4caf50; height: 100%; border-radius: 10px; width: 45%; } /* Simulated Level 1 */
 
-    .ad-placeholder {
-        background: #262730;
-        border: 1px dashed #4caf50;
-        padding: 20px;
-        text-align: center;
-        border-radius: 15px;
-        color: #888;
-        font-size: 0.8rem;
+    .upgrade-card {
+        background: #111; padding: 15px; border-radius: 15px; border: 1px solid #333; margin-bottom: 10px;
+        display: flex; justify-content: space-between; align-items: center;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# --- DATABASE LOGIC ---
-conn = sqlite3.connect("village_mining.db", check_same_thread=False)
+# --- DB & LOGIC ---
+conn = sqlite3.connect("village_pro.db", check_same_thread=False)
 db = conn.cursor()
-db.execute("CREATE TABLE IF NOT EXISTS users (user_id TEXT PRIMARY KEY, coins INTEGER, last_mining TEXT)")
+db.execute("CREATE TABLE IF NOT EXISTS users (id TEXT PRIMARY KEY, coins INTEGER, pph INTEGER, level INTEGER)")
 conn.commit()
 
-# Current User Simulation (Integrated with Telegram later)
-user_id = "User_777" 
-row = db.execute("SELECT coins, last_mining FROM users WHERE user_id = ?", (user_id,)).fetchone()
-
+user_id = "Murthy_Tycoon_1" # Simulated session
+row = db.execute("SELECT coins, pph, level FROM users WHERE id = ?", (user_id,)).fetchone()
 if not row:
-    db.execute("INSERT INTO users VALUES (?, ?, ?)", (user_id, 0, datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
+    db.execute("INSERT INTO users VALUES (?, 1000, 500, 1)", (user_id,))
     conn.commit()
-    coins, last_mining = 0, datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    coins, pph, level = 1000, 500, 1
 else:
-    coins, last_mining = row
+    coins, pph, level = row
 
-# --- OFFLINE FARMING CALCULATION ---
-last_dt = datetime.strptime(last_mining, "%Y-%m-%d %H:%M:%S")
-diff = (datetime.now() - last_dt).total_seconds() / 3600
-if diff > 3: diff = 3 # Cap at 3 hours
-offline_bonus = int(diff * 1000) # 1000 coins per hour
+# --- UI CONTENT ---
 
-if offline_bonus > 50: # Only show if significant
-    coins += offline_bonus
-    db.execute("UPDATE users SET coins = ?, last_mining = ? WHERE user_id = ?", (coins, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), user_id))
-    conn.commit()
-    st.toast(f"🚜 Your Farmers mined {offline_bonus} coins while you were away!", icon="🌾")
-
-# --- UI LAYOUT ---
+# Top Stats (PPH and Level)
 st.markdown(f"""
-    <div class="main-header">
-        <h1 style="margin:0; font-size: 1.5rem; color: #e8f5e9;">VILLAGE MINING AI</h1>
-        <div class="coin-balance">🪙 {coins:,}</div>
-        <p style="margin:0; color: #a5d6a7;">Global Tycoon Rank: #1,204</p>
+    <div class="stats-container">
+        <div class="stat-box"><div class="stat-label">PROFIT PER HOUR</div><div class="stat-val">+{pph:,}</div></div>
+        <div class="stat-box"><div class="stat-label">VILLAGE LEVEL</div><div class="stat-val">{level}</div></div>
     </div>
 """, unsafe_allow_html=True)
 
-# Central Mining Area
-st.markdown('<div class="mining-section">', unsafe_allow_html=True)
-st.image("https://cdn-icons-png.flaticon.com/512/2424/2424750.png", width=150) # Tractor Icon
-if st.button("🚜 HARVEST RICE (TAP) 🚜", use_container_width=True):
-    coins += 10
-    db.execute("UPDATE users SET coins = ?, last_mining = ? WHERE user_id = ?", (coins, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), user_id))
-    conn.commit()
-    st.rerun()
-st.markdown('</div>', unsafe_allow_html=True)
+st.markdown(f'<div class="main-coin-display">🪙 {coins:,}</div>', unsafe_allow_html=True)
 
-# Tabs for Tasks and Referrals
-tab1, tab2, tab3 = st.tabs(["📋 Tasks", "🤝 Refer", "🏆 Leaders"])
+# Level Progress
+st.markdown('<div class="progress-bar-bg"><div class="progress-bar-fill"></div></div>', unsafe_allow_html=True)
+st.caption(f"Level {level} Tycoon • Next Level at 50,000 Coins")
 
-with tab1:
-    st.markdown("### Daily Missions")
-    st.markdown('<div class="task-card"><b>Watch Video Ad:</b> Get +5,000 Coins 🪙<br><small>Click to earn rewards</small></div>', unsafe_allow_html=True)
-    if st.button("▶️ Watch Ad"): st.success("Feature connecting to Ad Network...")
-
-    st.markdown('<div class="task-card"><b>Follow on X:</b> Get +10,000 Coins 🪙</div>', unsafe_allow_html=True)
-    st.markdown('<div class="task-card"><b>Join Telegram:</b> Get +20,000 Coins 🪙</div>', unsafe_allow_html=True)
-
-with tab2:
-    st.markdown("### Invite & Multiply")
-    st.info("Share your link and earn 10% of your friends' lifetime earnings!")
-    st.text_input("Referral Link", value=f"https://t.me/VillageMiningAIBot?start={user_id}", disabled=True)
-    st.button("📢 Share to WhatsApp")
-
-with tab3:
-    st.markdown("### Global Leaderboard")
-    st.write("1. 👑 Tycoon_King - 15.4M Coins")
-    st.write("2. 🚜 FarmMaster - 12.1M Coins")
-    st.write("3. 🌾 RiceLord - 9.8M Coins")
+# Mining Area
+col1, col2, col3 = st.columns([1,2,1])
+with col2:
+    st.image("https://cdn-icons-png.flaticon.com/512/2424/2424750.png", width=180)
+    if st.button("🚜 HARVEST (TAP) 🚜", use_container_width=True):
+        coins += (10 * level)
+        db.execute("UPDATE users SET coins = ? WHERE id = ?", (coins, user_id))
+        conn.commit()
+        st.rerun()
 
 st.divider()
 
-# Ads Section
-st.markdown('<div class="ad-placeholder">📺 SPONSORED CONTENT<br>Monetization active. Revenue flowing from Telegram Ads Network.</div>', unsafe_allow_html=True)
+# Navigation Tabs
+t1, t2, t3, t4 = st.tabs(["🛒 Shop", "📋 Tasks", "🏆 Rank", "💰 Wallet"])
+
+with t1:
+    st.markdown("### Upgrade your Village")
+    st.markdown("""
+        <div class="upgrade-card"><div><b>Premium Seeds</b><br><small>+200 PPH</small></div><div style="color:#ffd700">Cost: 5,000</div></div>
+        <div class="upgrade-card"><div><b>Automatic Irrigation</b><br><small>+1,000 PPH</small></div><div style="color:#ffd700">Cost: 25,000</div></div>
+        <div class="upgrade-card"><div><b>AI Tractor</b><br><small>+5,000 PPH</small></div><div style="color:#ffd700">Cost: 100,000</div></div>
+    """, unsafe_allow_html=True)
+    if st.button("Buy Premium Seeds"): st.warning("Need more coins!")
+
+with t2:
+    st.markdown("### Daily Quests")
+    st.checkbox("Daily Check-in (Day 1: +5,000 Coins)", value=True, disabled=True)
+    st.button("📺 Watch Video (+10k Coins)")
+
+with t3:
+    st.markdown("### Global Leaderboard")
+    st.write("🥇 **Murthy_Tycoon_1** (You) - #1,204")
+    st.write("... loading real-time data ...")
+
+with t4:
+    st.markdown("### Airdrop Preparedness")
+    st.success("Wallet Connection opening soon for TON Ecosystem!")
+    st.button("🔗 Connect Wallet (Coming Soon)")
+
+st.divider()
+st.markdown('<p style="text-align:center; color:#555; font-size:0.7rem;">Village Mining AI v2.0 • Extraordinary Edition</p>', unsafe_allow_html=True)
