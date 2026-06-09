@@ -38,10 +38,17 @@ st.markdown("""
     /* TAPPER AREA */
     .tapper-zone {
         display: flex; justify-content: center; align-items: center;
-        background: radial-gradient(circle, rgba(76,175,80,0.2) 0%, rgba(0,0,0,0) 70%);
-        height: 220px; position: relative; margin-top: 15px;
+        background: radial-gradient(circle, rgba(76,175,80,0.25) 0%, rgba(0,0,0,0) 70%);
+        height: 180px; margin: 15px 0; border-radius: 50%;
     }
     
+    /* Mystery Box Premium Container */
+    .mystery-box-card {
+        background: linear-gradient(135deg, rgba(255,215,0,0.1) 0%, rgba(0,0,0,0.6) 100%);
+        border: 2px dashed #ffd700; border-radius: 20px; padding: 25px; text-align: center;
+        box-shadow: 0 0 25px rgba(255,215,0,0.2); margin-bottom: 20px;
+    }
+
     /* Premium Item Cards */
     .premium-item-card {
         background: rgba(15,15,15,0.85); border: 1px solid #222; border-radius: 16px; padding: 14px;
@@ -54,9 +61,8 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # --- DATABASE ENGINE ---
-conn = sqlite3.connect("village_v70_final.db", check_same_thread=False)
+conn = sqlite3.connect("village_v80_core.db", check_same_thread=False)
 db = conn.cursor()
-# Added last_claim column to track dynamic date-stamps
 db.execute("CREATE TABLE IF NOT EXISTS users (id TEXT PRIMARY KEY, coins INTEGER, pph INTEGER, level INTEGER, last_claim TEXT)")
 conn.commit()
 
@@ -64,13 +70,13 @@ USER_ID = "Murthy_Grand_Tycoon"
 row = db.execute("SELECT coins, pph, level, last_claim FROM users WHERE id = ?", (USER_ID,)).fetchone()
 
 if not row:
-    db.execute("INSERT INTO users VALUES (?, 45000, 500, 1, '')", (USER_ID,))
+    db.execute("INSERT INTO users VALUES (?, 55000, 500, 1, '')", (USER_ID,))
     conn.commit()
-    coins, pph, level, last_claim = 45000, 500, 1, ""
+    coins, pph, level, last_claim = 55000, 500, 1, ""
 else:
     coins, pph, level, last_claim = row
 
-# --- LEVEL SYSTEM ---
+# --- LEVEL MECHANICS ---
 COINS_PER_LEVEL = 10000
 level = 1 + (coins // COINS_PER_LEVEL)
 next_target = level * COINS_PER_LEVEL
@@ -98,31 +104,56 @@ st.markdown(f"""
     </div>
 """, unsafe_allow_html=True)
 
-# --- COIN MATRIX ---
+# --- MAIN BALANCE DISPLAY ---
 st.markdown(f'<div class="balance-container"><div class="balance-val">🪙 {coins:,}</div></div>', unsafe_allow_html=True)
 
-# --- NATIVE NAVIGATION COMPONENT ---
-menu = st.segmented_control("Navigation", ["🎯 MINE", "🚀 BOOST", "📜 EARN QUESTS", "🏆 FRENZ", "💎 AIRDROP"], selection_mode="single", default="🎯 MINE", label_visibility="collapsed")
+# --- RELIABLE NAVIGATION SYSTEM ---
+if 'current_page' not in st.session_state:
+    st.session_state.current_page = "🎯 MINE"
+
+col1, col2, col3, col4, col5 = st.columns(5)
+with col1: 
+    if st.button("🎯 MINE", use_container_width=True): st.session_state.current_page = "🎯 MINE"
+with col2: 
+    if st.button("🚀 BOOST", use_container_width=True): st.session_state.current_page = "🚀 BOOST"
+with col3: 
+    if st.button("📜 QUESTS", use_container_width=True): st.session_state.current_page = "📜 QUESTS"
+with col4: 
+    if st.button("🏆 FRENZ", use_container_width=True): st.session_state.current_page = "🏆 FRENZ"
+with col5: 
+    if st.button("💎 DROP", use_container_width=True): st.session_state.current_page = "💎 DROP"
 
 st.divider()
 
 current_today = datetime.now().strftime("%Y-%m-%d")
 
-if menu == "🎯 MINE":
-    st.markdown(f"<div style='display:flex; justify-content:space-between; font-size:12px; color:#81c784;'><b>Level {level}</b> <b>Target: {next_target:,}</b></div>", unsafe_allow_html=True)
+# --- PAGE ENGINE CONTROLLERS ---
+if st.session_state.current_page == "🎯 MINE":
+    st.markdown(f"<div style='display:flex; justify-content:space-between; font-size:12px; color:#81c784; margin-bottom:5px;'><b>Level {level}</b> <b>Target: {next_target:,}</b></div>", unsafe_allow_html=True)
     st.progress(progress / 100)
     
     st.markdown('<div class="tapper-zone">', unsafe_allow_html=True)
-    if st.button("🚜 CLICK TO HARVEST RICE", key="tap", use_container_width=True):
+    # Refined dynamic click mechanism
+    if st.button("🚜 HARVEST ACTIVE TAP (Click Here)", key="tap_core", use_container_width=True):
         coins += (15 * level)
         db.execute("UPDATE users SET coins = ? WHERE id = ?", (coins, USER_ID))
         conn.commit()
+        st.toast(f"🪙 +{15 * level} Coins Added to Balance!")
         st.rerun()
     st.markdown('</div>', unsafe_allow_html=True)
 
-elif menu == "🚀 BOOST":
+elif st.session_state.current_page == "🚀 BOOST":
     st.markdown("### 🎁 Mystery Reward Box")
-    if st.button("Unlock Golden Box (1,000 Coins)", use_container_width=True):
+    
+    st.markdown("""
+        <div class="mystery-box-card">
+            <h1 style="font-size: 65px; margin: 0; padding: 0;">🎁</h1>
+            <h3 style="color:#ffd700; margin-top:10px; font-family:'Orbitron';">Premium Crypto Box</h3>
+            <p style="font-size:0.8rem; color:#aaa; margin:5px 0;">Unlock costs 1,000 coins. Instant chance to hit 15,000 token drops!</p>
+        </div>
+    """, unsafe_allow_html=True)
+    
+    if st.button("🔓 Open Premium Box (1,000 Coins)", key="box_trigger", use_container_width=True):
         if coins >= 1000:
             coins -= 1000
             won = random.choice([2000, 5000, 15000])
@@ -130,49 +161,46 @@ elif menu == "🚀 BOOST":
             db.execute("UPDATE users SET coins = ? WHERE id = ?", (coins, USER_ID))
             conn.commit()
             st.balloons()
-            st.success(f"🎉 Premium crate cracked! You found 🪙 {won:,} Coins!")
+            st.success(f"🎉 Crate unlocked successfully! You found 🪙 {won:,} Coins!")
             st.rerun()
         else:
-            st.error("❌ Insufficient coins!")
+            st.error("❌ Not enough coins to crack this crate!")
 
-elif menu == "📜 EARN QUESTS":
+elif st.session_state.current_page == "📜 QUESTS":
     st.markdown("### 📜 Daily Task Center")
-    
     st.markdown("""
         <div class="premium-item-card">
             <div>
-                <div class="item-title">🎁 Attendance Streak Multiplier</div>
-                <div class="item-desc">Claim your web3 distribution setup bonus</div>
+                <div class="item-title">🎁 Daily Attendance Reward</div>
+                <div class="item-desc">Fixed daily check-in token credit grid</div>
             </div>
             <div class="item-cost" style="color:#4caf50;">+5,000</div>
         </div>
     """, unsafe_allow_html=True)
     
-    # DYNAMIC TIME-LOCK SYSTEM CHECK
     if last_claim == current_today:
-        st.warning("🔒 Already claimed today! Come back tomorrow for your next check-in streak.")
-        st.button("Claim Daily Reward (+5,000)", disabled=True, use_container_width=True)
+        st.warning("🔒 Already claimed today! Come back tomorrow.")
+        st.button("Claim Daily Reward (+5,000)", disabled=True, key="claim_dis")
     else:
-        if st.button("Claim Daily Reward (+5,000)", use_container_width=True):
+        if st.button("Claim Daily Reward (+5,000)", key="claim_act", use_container_width=True):
             coins += 5000
-            # Lock the claim process for today
             db.execute("UPDATE users SET coins = ?, last_claim = ? WHERE id = ?", (coins, current_today, USER_ID))
             conn.commit()
-            st.toast("5,000 Streak Coins credited successfully!", icon="🎁")
+            st.toast("5,000 Streak Coins claimed!", icon="🎁")
             st.rerun()
 
-elif menu == "🏆 FRENZ":
-    st.markdown("### 🏆 Worldwide Ranking Ecosystem")
+elif st.session_state.current_page == "🏆 FRENZ":
+    st.markdown("### 🏆 Global Leaderboard")
     st.markdown(f"""
         <div class="premium-item-card"><div><b>🥇 Tycoon_King</b></div><div class="item-cost">15,403,000</div></div>
         <div class="premium-item-card"><div><b>🥈 FarmMaster_AI</b></div><div class="item-cost">12,110,500</div></div>
         <div class="premium-item-card" style="border: 1px solid #ffd700; background:rgba(255,215,0,0.05);"><div><b>⭐ {USER_ID} (YOU)</b></div><div class="item-cost">{coins:,}</div></div>
     """, unsafe_allow_html=True)
 
-elif menu == "💎 AIRDROP":
-    st.markdown("### 💎 Web3 Token Snapshot")
-    st.info("Ecosystem snapshot algorithm checks total Profit Per Hour metrics dynamic balances.")
-    st.button("🔗 Connect TON Wallet Address (Soon)", disabled=True, use_container_width=True)
+elif st.session_state.current_page == "💎 DROP":
+    st.markdown("### 💎 Web3 Snapshot Distribution")
+    st.info("TON Wallet connection nodes deploy right after token distribution phase initialization.")
+    st.button("🔗 Bind TON Wallet Address (Soon)", disabled=True, use_container_width=True)
 
-# Fixed footer bottom gap padding
-st.markdown("<br><br><br><br>", unsafe_allow_html=True)
+# Padding space block for structural layout
+st.markdown("<br><br><br>", unsafe_allow_html=True)
