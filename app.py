@@ -3,103 +3,148 @@ import sqlite3
 import time
 from datetime import datetime
 
-# Page configuration
-st.set_page_config(page_title="Village Mining AI - Tap to Earn", page_icon="🌾", layout="centered")
+# --- CONFIGURATION ---
+st.set_page_config(page_title="Village Mining AI", page_icon="🌾", layout="centered")
 
-# --- DATABASE SETUP ---
-conn = sqlite3.connect("village_users.db", check_same_thread=False)
-cursor = conn.cursor()
-cursor.execute("""
-    CREATE TABLE IF NOT EXISTS users (
-        user_id TEXT PRIMARY KEY,
-        coins INTEGER DEFAULT 0,
-        last_login TEXT
-    )
-""")
-conn.commit()
-
-# Mock user for testing (In Telegram, this comes from Telegram URL)
-# To test on web, we use a default user 'murthy_user'
-if 'user_id' not in st.session_state:
-    st.session_state.user_id = "murthy_user"
-
-user_id = st.session_state.user_id
-
-# Fetch or Create User Profile from DB
-cursor.execute("SELECT coins, last_login FROM users WHERE user_id = ?", (user_id,))
-row = cursor.execute("SELECT coins, last_login FROM users WHERE user_id = ?", (user_id,)).fetchone()
-
-if row is None:
-    cursor.execute("INSERT INTO users (user_id, coins, last_login) VALUES (?, ?, ?)", (user_id, 0, datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
-    conn.commit()
-    current_coins = 0
-    last_login_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-else:
-    current_coins, last_login_str = row
-
-# --- CORE FEATURE: OFFLINE FARMING (PASSIVE INCOME) ---
-# Calculate hours passed since last visit
-last_login_dt = datetime.strptime(last_login_str, "%Y-%m-%d %H:%M:%S")
-time_diff = datetime.now() - last_login_dt
-hours_passed = time_diff.total_seconds() / 3600
-
-# Cap the offline farming to maximum 3 hours (As per Hamster/X-Empire model)
-if hours_passed > 3:
-    hours_passed = 3
-
-# Earn 500 coins per hour when offline
-offline_earnings = int(hours_passed * 500)
-
-if offline_earnings > 0:
-    current_coins += offline_earnings
-    # Immediately update the DB so it doesn't loop
-    cursor.execute("UPDATE users SET coins = ?, last_login = ? WHERE user_id = ?", (current_coins, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), user_id))
-    conn.commit()
-    st.success(f"🚜 Welcome back! Your village farmers mined 🪙 {offline_earnings} Coins while you were away! (Max 3 hours)")
-
-# Update last login time for current session
-cursor.execute("UPDATE users SET last_login = ? WHERE user_id = ?", (datetime.now().strftime("%Y-%m-%d %H:%M:%S"), user_id))
-conn.commit()
-
-# Beautiful CSS Custom Styling
+# --- STYLED CSS FOR EXTRAORDINARY UI ---
 st.markdown("""
     <style>
-    .main-title { text-align: center; color: #4CAF50; font-size: 3rem; font-weight: bold; margin-bottom: 10px; }
-    .subtitle { text-align: center; color: #888; font-size: 1.2rem; margin-bottom: 30px; }
-    .score-box { text-align: center; background-color: #1e1e1e; padding: 20px; border-radius: 15px; border: 2px solid #4CAF50; font-size: 2.5rem; font-weight: bold; color: #FFD700; margin-bottom: 20px; }
-    .ad-box { background-color: #2d2d2d; border: 1px dashed #555; padding: 15px; text-align: center; border-radius: 10px; color: #aaa; font-size: 0.9rem; margin-top: 30px; }
-    .share-box { background-color: #1a2e1a; border: 1px solid #4CAF50; padding: 15px; border-radius: 10px; margin-top: 20px; color: #fff; }
+    @import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@400;700&display=swap');
+    
+    html, body, [class*="st-"] {
+        font-family: 'Urbanist', sans-serif;
+        background-color: #0e1117;
+        color: #ffffff;
+    }
+    
+    .main-header {
+        text-align: center;
+        background: linear-gradient(90deg, #1b5e20, #4caf50);
+        padding: 20px;
+        border-radius: 20px;
+        margin-bottom: 25px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+    
+    .coin-balance {
+        font-size: 3.5rem;
+        font-weight: 700;
+        color: #ffd700;
+        text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+    }
+    
+    .mining-section {
+        text-align: center;
+        padding: 40px 20px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 30px;
+        border: 1px solid #2e7d32;
+        margin-bottom: 30px;
+    }
+    
+    .tractor-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        transition: transform 0.1s ease-in-out;
+    }
+    
+    .tractor-btn:active {
+        transform: scale(0.9);
+    }
+
+    .task-card {
+        background: #1e1e1e;
+        padding: 15px;
+        border-radius: 15px;
+        border-left: 5px solid #ffd700;
+        margin-bottom: 10px;
+    }
+
+    .ad-placeholder {
+        background: #262730;
+        border: 1px dashed #4caf50;
+        padding: 20px;
+        text-align: center;
+        border-radius: 15px;
+        color: #888;
+        font-size: 0.8rem;
+    }
     </style>
 """, unsafe_allow_html=True)
 
-# App Content UI
-st.markdown("<div class='main-title'>🌾 VILLAGE MINING AI</div>", unsafe_allow_html=True)
-st.markdown("<div class='subtitle'>Build Your Digital Village - Offline Farming Active ✅</div>", unsafe_allow_html=True)
+# --- DATABASE LOGIC ---
+conn = sqlite3.connect("village_mining.db", check_same_thread=False)
+db = conn.cursor()
+db.execute("CREATE TABLE IF NOT EXISTS users (user_id TEXT PRIMARY KEY, coins INTEGER, last_mining TEXT)")
+conn.commit()
 
-# Display Real-time Coins from Database
-st.markdown(f"<div class='score-box'>🪙 {current_coins} Coins</div>", unsafe_allow_html=True)
+# Current User Simulation (Integrated with Telegram later)
+user_id = "User_777" 
+row = db.execute("SELECT coins, last_mining FROM users WHERE user_id = ?", (user_id,)).fetchone()
 
-# --- MINING TAP BUTTON ---
-col1, col2, col3 = st.columns([1, 2, 1])
-with col2:
-    if st.button("🚜 TAP TO GROW VILLAGE 🚜", use_container_width=True):
-        new_balance = current_coins + 10
-        cursor.execute("UPDATE users SET coins = ? WHERE user_id = ?", (new_balance, user_id))
-        conn.commit()
-        st.rerun()
+if not row:
+    db.execute("INSERT INTO users VALUES (?, ?, ?)", (user_id, 0, datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
+    conn.commit()
+    coins, last_mining = 0, datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+else:
+    coins, last_mining = row
+
+# --- OFFLINE FARMING CALCULATION ---
+last_dt = datetime.strptime(last_mining, "%Y-%m-%d %H:%M:%S")
+diff = (datetime.now() - last_dt).total_seconds() / 3600
+if diff > 3: diff = 3 # Cap at 3 hours
+offline_bonus = int(diff * 1000) # 1000 coins per hour
+
+if offline_bonus > 50: # Only show if significant
+    coins += offline_bonus
+    db.execute("UPDATE users SET coins = ?, last_mining = ? WHERE user_id = ?", (coins, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), user_id))
+    conn.commit()
+    st.toast(f"🚜 Your Farmers mined {offline_bonus} coins while you were away!", icon="🌾")
+
+# --- UI LAYOUT ---
+st.markdown(f"""
+    <div class="main-header">
+        <h1 style="margin:0; font-size: 1.5rem; color: #e8f5e9;">VILLAGE MINING AI</h1>
+        <div class="coin-balance">🪙 {coins:,}</div>
+        <p style="margin:0; color: #a5d6a7;">Global Tycoon Rank: #1,204</p>
+    </div>
+""", unsafe_allow_html=True)
+
+# Central Mining Area
+st.markdown('<div class="mining-section">', unsafe_allow_html=True)
+st.image("https://cdn-icons-png.flaticon.com/512/2424/2424750.png", width=150) # Tractor Icon
+if st.button("🚜 HARVEST RICE (TAP) 🚜", use_container_width=True):
+    coins += 10
+    db.execute("UPDATE users SET coins = ?, last_mining = ? WHERE user_id = ?", (coins, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), user_id))
+    conn.commit()
+    st.rerun()
+st.markdown('</div>', unsafe_allow_html=True)
+
+# Tabs for Tasks and Referrals
+tab1, tab2, tab3 = st.tabs(["📋 Tasks", "🤝 Refer", "🏆 Leaders"])
+
+with tab1:
+    st.markdown("### Daily Missions")
+    st.markdown('<div class="task-card"><b>Watch Video Ad:</b> Get +5,000 Coins 🪙<br><small>Click to earn rewards</small></div>', unsafe_allow_html=True)
+    if st.button("▶️ Watch Ad"): st.success("Feature connecting to Ad Network...")
+
+    st.markdown('<div class="task-card"><b>Follow on X:</b> Get +10,000 Coins 🪙</div>', unsafe_allow_html=True)
+    st.markdown('<div class="task-card"><b>Join Telegram:</b> Get +20,000 Coins 🪙</div>', unsafe_allow_html=True)
+
+with tab2:
+    st.markdown("### Invite & Multiply")
+    st.info("Share your link and earn 10% of your friends' lifetime earnings!")
+    st.text_input("Referral Link", value=f"https://t.me/VillageMiningAIBot?start={user_id}", disabled=True)
+    st.button("📢 Share to WhatsApp")
+
+with tab3:
+    st.markdown("### Global Leaderboard")
+    st.write("1. 👑 Tycoon_King - 15.4M Coins")
+    st.write("2. 🚜 FarmMaster - 12.1M Coins")
+    st.write("3. 🌾 RiceLord - 9.8M Coins")
 
 st.divider()
 
-# --- SHARE & REFERRAL SYSTEM ---
-st.markdown("### 👥 Invite Friends & Earn")
-st.markdown("<div class='share-box'><b>🎁 Bonus:</b> Invite your friends to build their village and get <b>+5,000 Coins</b> instantly!</div>", unsafe_allow_html=True)
-
-referral_link = "https://t.me/VillageMiningAIBot?start=user_123456"
-st.text_input("Copy your unique referral link:", value=referral_link, disabled=True)
-
-if st.button("📢 Share on WhatsApp", use_container_width=True):
-    whatsapp_url = f"https://api.whatsapp.com/send?text=Join%20the%20amazing%20Village%20Mining%20AI%20game%2C%20build%20your%20village%20and%20start%20earning%20now!%20{referral_link}"
-    st.markdown(f'<a href="{whatsapp_url}" target="_blank" style="text-decoration:none;"><button style="width:100%; padding:10px; background-color:#25D366; color:white; border:none; border-radius:5px; font-weight:bold; cursor:pointer;">Open WhatsApp to Invite</button></a>', unsafe_allow_html=True)
-
-# --- ADVERTISEMENTS PLACEHOLDER ---
-st.markdown("<div class='ad-box'>📺 <b>Sponsored Advertisement Box</b><br>Ads from Telegram/Google networks will stream here. (Revenue generates per view/click)</div>", unsafe_allow_html=True)
+# Ads Section
+st.markdown('<div class="ad-placeholder">📺 SPONSORED CONTENT<br>Monetization active. Revenue flowing from Telegram Ads Network.</div>', unsafe_allow_html=True)
