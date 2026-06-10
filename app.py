@@ -37,18 +37,22 @@ st.markdown("""
         box-shadow: 0 0 45px rgba(76, 175, 80, 0.7), inset 0 0 20px rgba(0,0,0,0.8);
         font-size: 85px; user-select: none;
     }
-    .action-module-row-card {
-        background: rgba(12,12,12,0.95); border: 1px solid #222; border-radius: 16px; padding: 15px;
-        display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
-    }
-    .module-card-headline { font-weight: 800; font-size: 0.95rem; color: #fff; }
-    .module-card-cost-index { color: #ffd700; font-weight: 900; font-family: 'Orbitron'; font-size: 0.9rem; }
     .monetization-ad-banner {
         background: linear-gradient(90deg, rgba(255,215,0,0.08) 0%, rgba(76,175,80,0.08) 100%);
         border: 2px dashed rgba(255,215,0,0.4); border-radius: 14px;
         padding: 15px; text-align: center; margin-top: 25px;
         box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         cursor: pointer; display: block; text-decoration: none; color: white !important;
+    }
+    @keyframes popGlow {
+        0% { transform: scale(0.9); opacity: 0; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+    .custom-reward-toast {
+        background: linear-gradient(135deg, #1b5e20 0%, #000000 100%);
+        border: 2px solid #ffd700; padding: 25px; border-radius: 18px;
+        text-align: center; box-shadow: 0 0 40px rgba(255,215,0,0.5);
+        animation: popGlow 0.3s ease-out forwards; margin-top: 20px;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -63,13 +67,17 @@ USER_ID = "Murthy_Grand_Tycoon"
 row = db.execute("SELECT coins, pph, level, last_claim FROM users WHERE id = ?", (USER_ID,)).fetchone()
 
 if not row:
-    db.execute("INSERT INTO users VALUES (?, 257605, 900, 1, '')", (USER_ID,))
+    db.execute("INSERT INTO users VALUES (?, 263605, 900, 1, '')", (USER_ID,))
     conn.commit()
-    coins, pph, level, last_claim = 257605, 900, 1, ""
+    coins, pph, level, last_claim = 263605, 900, 1, ""
 else:
     coins, pph, level, last_claim = row
 
-# --- ADVANCED LEVELS LOGIC (10 TIERS) ---
+# --- SESSION STATE LOCK FOR ANIMATIONS ---
+if "won_reward" not in st.session_state:
+    st.session_state.won_reward = None
+
+# --- DYNAMIC RE-CALCULATION ---
 COINS_PER_LEVEL = 100000  
 MAX_SYSTEM_LEVELS = 10
 calculated_level = 1 + (coins // COINS_PER_LEVEL)
@@ -117,8 +125,8 @@ st.divider()
 current_date_stamp = datetime.now().strftime("%Y-%m-%d")
 
 if active_panel == "🎯 MINE":
+    st.session_state.won_reward = None # Clear booster panel state
     if level < MAX_SYSTEM_LEVELS:
-        # PURE ENGLISH TRANSLATION - NO TELUGU ANYWHERE
         st.markdown(f"""
             <div style='display:flex; justify-content:space-between; font-size:11px; color:#81c784; margin-bottom:4px; font-weight:900;'>
                 <span>RANK METRIC: {coins:,} / {next_target:,}</span>
@@ -148,22 +156,33 @@ elif active_panel == "🚀 BOOST":
         </div>
     """, unsafe_allow_html=True)
     
-    if st.button("🔓 Crack Premium Mystery Box (1,000 Coins)", key="crate_v14", use_container_width=True):
+    if st.button("🔓 Crack Premium Mystery Box (1,000 Coins)", key="crate_final_lock", use_container_width=True):
         if coins >= 1000:
             coins -= 1000
-            won_prize = random.choice([2000, 5000, 15000])
-            coins += won_prize
+            prize = random.choice([2000, 5000, 15000])
+            coins += prize
             db.execute("UPDATE users SET coins = ? WHERE id = ?", (coins, USER_ID))
             conn.commit()
-            with st.spinner("Decoding Mystery Box..."):
-                time.sleep(1)
-            st.balloons()
-            st.success(f"🎉 Crate opened! Reward: 🪙 +{won_prize:,} Coins!")
+            
+            # Lock the prize in session state to force persist over the rerun
+            st.session_state.won_reward = prize
             st.rerun()
         else:
             st.error("❌ Insufficient tokens!")
 
+    # PERMANENT VISUAL LOCK ENGAGED - WILL NOT DISAPPEAR UNTIL NAVIGATED AWAY
+    if st.session_state.won_reward is not None:
+        st.markdown(f"""
+            <div class="custom-reward-toast">
+                <h1 style="margin:0; font-size:45px;">✨🪙✨</h1>
+                <h3 style="color:#ffd700; margin:5px 0; font-family:'Orbitron'; font-weight:900; letter-spacing:1px;">CRATE UNLOCKED</h3>
+                <h1 style="color:#ffffff; margin:10px 0; font-family:'Orbitron'; font-weight:900; text-shadow:0 0 15px #ffd700; font-size:35px;">+{st.session_state.won_reward:,} COINS</h1>
+                <p style="font-size:12px; color:#81c784; margin:0; font-weight:bold; letter-spacing:0.5px;">⚡ Wallet Balance Credited Successfully ⚡</p>
+            </div>
+        """, unsafe_allow_html=True)
+
 elif active_panel == "📜 QUESTS":
+    st.session_state.won_reward = None
     st.markdown("### 📜 Automated Daily Task Center")
     if last_claim == current_date_stamp:
         st.warning("🔒 Already claimed today!")
@@ -177,10 +196,12 @@ elif active_panel == "📜 QUESTS":
             st.rerun()
 
 elif active_panel == "🏆 FRENZ":
+    st.session_state.won_reward = None
     st.markdown(f"### 🏆 Global Leaderboard")
     st.write(f"⭐ **{USER_ID} (YOU)** - {coins:,}")
 
 elif active_panel == "💎 DROP":
+    st.session_state.won_reward = None
     st.markdown("### 💎 Web3 Snapshot Distribution")
     st.button("🔗 Bind TON Wallet Address (Locked)", disabled=True)
 
