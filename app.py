@@ -10,7 +10,7 @@ st.set_page_config(page_title="Village Mining AI", page_icon="🌾", layout="cen
 # --- PRODUCTION GRADE HIGH-END TELEGRAM WEB3 APP UI CSS ---
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Urbanist:wght@600;800;900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght=700;900&family=Urbanist:wght=600;800;900&display=swap');
     
     html, body, [class*="st-"] { font-family: 'Urbanist', sans-serif; background-color: #000000; color: #ffffff; }
     .stApp { background: radial-gradient(circle at 50% 15%, #0b1f0b 0%, #010401 60%, #000000 100%); }
@@ -54,7 +54,6 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # --- DATABASE LOGISTICS SYSTEM ---
-# ప్రతిసారీ పాత మెమరీని తుడిచేయడానికి డేటాబేస్ ఫైల్ పేరును 'v14' కి మార్చాను
 conn = sqlite3.connect("village_v14_final.db", check_same_thread=False)
 db = conn.cursor()
 db.execute("CREATE TABLE IF NOT EXISTS users (id TEXT PRIMARY KEY, coins INTEGER, pph INTEGER, level INTEGER, last_claim TEXT)")
@@ -119,10 +118,11 @@ current_date_stamp = datetime.now().strftime("%Y-%m-%d")
 
 if active_panel == "🎯 MINE":
     if level < MAX_SYSTEM_LEVELS:
+        # PURE ENGLISH TRANSLATION - NO TELUGU ANYWHERE
         st.markdown(f"""
             <div style='display:flex; justify-content:space-between; font-size:11px; color:#81c784; margin-bottom:4px; font-weight:900;'>
                 <span>RANK METRIC: {coins:,} / {next_target:,}</span>
-                <span style='color:#ffd700;'>🚜 NEXT LEVEL KI INKA: {points_needed:,} POINTS KAVALI</span>
+                <span style='color:#ffd700;'>🚜 NEED FOR NEXT LEVEL: {points_needed:,} POINTS</span>
             </div>
         """, unsafe_allow_html=True)
     else:
@@ -135,11 +135,11 @@ if active_panel == "🎯 MINE":
         coins += (40 * level)
         db.execute("UPDATE users SET coins = ? WHERE id = ?", (coins, USER_ID))
         conn.commit()
-        st.toast(f"🪙 +{40 * level} Tokens Extracted!", icon="🚜")
+        st.toast(f"🪙 +{40 * level} Coins Harvested!", icon="🚜")
         st.rerun()
 
 elif active_panel == "🚀 BOOST":
-    st.markdown("### 🎁 Premium Ecosystem Mystery Crate")
+    st.markdown("### 🚀 Premium Ecosystem Mystery Crate")
     st.markdown("""
         <div style="background: linear-gradient(135deg, rgba(255,215,0,0.12) 0%, rgba(0,0,0,0.7) 100%); border: 2px dashed #ffd700; border-radius: 20px; padding: 22px; text-align: center; box-shadow: 0 0 25px rgba(255,215,0,0.25); margin-bottom: 20px;">
             <h1 style="font-size: 65px; margin: 0;">🎁</h1>
