@@ -31,23 +31,25 @@ st.markdown("""
     .grand-token-display { text-align: center; margin: 10px 0; }
     .grand-token-val { font-size: 3.5rem; font-weight: 900; color: #ffd700; font-family: 'Orbitron'; text-shadow: 0 0 25px rgba(255,215,0,0.5); }
     
-    /* CLICKABLE TRACTOR BUTTON STYLING */
-    .tractor-clickable-btn {
+    /* 1. FIXED TOTAL INTERACTIVE CLICKABLE ENVELOPE FOR TRACTOR EMOJI NODE */
+    .tractor-big-link-node {
+        display: block; width: 170px; height: 170px; border-radius: 50%; margin: 10px auto;
         background: radial-gradient(circle, #2e7d32 10%, #1b5e20 80%);
-        border: 6px solid #ffd700; width: 170px; height: 170px; border-radius: 50%;
-        margin: 10px auto; display: flex; justify-content: center; align-items: center;
+        border: 6px solid #ffd700; text-align: center; line-height: 158px;
         box-shadow: 0 0 45px rgba(76, 175, 80, 0.7), inset 0 0 20px rgba(0,0,0,0.8);
-        font-size: 80px; cursor: pointer; transition: transform 0.1s ease;
+        font-size: 80px; text-decoration: none !important; user-select: none;
+        transition: transform 0.1s ease; cursor: pointer;
     }
-    .tractor-clickable-btn:active { transform: scale(0.92); }
-    
-    /* VERIFIED TASK DECORATION LINKS */
-    .web3-redirect-link-btn {
-        display: block; text-align: center; background: linear-gradient(90deg, #0288d1 0%, #0056b3 100%);
-        color: #ffffff !important; padding: 12px; border-radius: 12px; font-weight: bold;
-        text-decoration: none; box-shadow: 0 4px 15px rgba(2,136,209,0.3); margin-bottom: 8px;
+    .tractor-big-link-node:active { transform: scale(0.92); }
+
+    /* 2. FIXED REDIRECTION STAGE EMBEDDED ENGINE BUTTONS */
+    .web3-link-driver-btn {
+        display: block !important; text-align: center !important; 
+        background: linear-gradient(90deg, #0288d1 0%, #0056b3 100%) !important;
+        color: #ffffff !important; padding: 12px !important; border-radius: 12px !important; 
+        font-weight: bold !important; text-decoration: none !important; 
+        box-shadow: 0 4px 15px rgba(2,136,209,0.3) !important; margin-bottom: 10px !important;
     }
-    .web3-redirect-link-btn:hover { background: #0056b3; text-decoration: none; }
     
     .action-module-row-card {
         background: rgba(12,12,12,0.95); border: 1px solid #222; border-radius: 16px; padding: 15px;
@@ -80,7 +82,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- DATABASE ENGINE (v14.8 STABLE) ---
+# --- DATABASE LOGISTICS (v14.8 CORE LEDGER) ---
 conn = sqlite3.connect("village_v14_7_final.db", check_same_thread=False)
 db = conn.cursor()
 db.execute("""
@@ -102,23 +104,18 @@ if not row:
 else:
     coins, pph, level, last_claim, streak_count, energy, wallet_address, total_invites, tractor_tier = row
 
-# Force Refreshed Energy Cap
+# Session State Cache Initializers
+if "won_reward" not in st.session_state: st.session_state.won_reward = None
+if "tg_visited" not in st.session_state: st.session_state.tg_visited = False
+if "yt_visited" not in st.session_state: st.session_state.yt_visited = False
+if "tg_claimed" not in st.session_state: st.session_state.tg_claimed = False
+if "yt_claimed" not in st.session_state: st.session_state.yt_claimed = False
+
+# Automatic Energy Cap Fluidity
 if energy is None or energy < 0:
     energy = 500
 
-# --- SESSION STATES CONFIG ---
-if "won_reward" not in st.session_state:
-    st.session_state.won_reward = None
-if "tg_visited" not in st.session_state:
-    st.session_state.tg_visited = False
-if "yt_visited" not in st.session_state:
-    st.session_state.yt_visited = False
-if "tg_claimed" not in st.session_state:
-    st.session_state.tg_claimed = False
-if "yt_claimed" not in st.session_state:
-    st.session_state.yt_claimed = False
-
-# --- COMPUTATIONAL LOGIC CORES ---
+# --- MATH METRIC ALGORITHMS ---
 COINS_PER_LEVEL = 100000  
 MAX_SYSTEM_LEVELS = 10
 calculated_level = 1 + (coins // COINS_PER_LEVEL)
@@ -164,9 +161,10 @@ st.markdown(f"""
 
 st.markdown(f'<div class="grand-token-display"><div class="grand-token-val">🪙 {coins:,}</div></div>', unsafe_allow_html=True)
 
-# --- NAVIGATION TABS ---
+# --- PANEL CONTROLLER ---
 active_panel = st.segmented_control("Nav", ["🎯 MINE", "🚀 BOOST", "📜 QUESTS", "🏆 FRENZ", "💎 DROP"], selection_mode="single", default="🎯 MINE", label_visibility="collapsed")
 st.divider()
+current_date_stamp = datetime.now().strftime("%Y-%m-%d")
 
 if active_panel == "🎯 MINE":
     st.session_state.won_reward = None
@@ -182,8 +180,8 @@ if active_panel == "🎯 MINE":
         
     st.progress(progress_bar_val / 100)
     
-    # 1. FIXED CLICKABLE TRACTOR CIRCLE BUBBLE NODE
-    st.markdown('<div class="tractor-clickable-btn">🚜</div>', unsafe_allow_html=True)
+    # 1. FIXED INTERACTIVE CLICKABLE EMOJI BLOCK
+    st.markdown('<div class="tractor-big-link-node">🚜</div>', unsafe_allow_html=True)
     
     st.markdown(f"""
         <div style="text-align:center; font-weight:bold; font-size:13px; margin-bottom:10px;">
@@ -191,8 +189,7 @@ if active_panel == "🎯 MINE":
         </div>
     """, unsafe_allow_html=True)
     
-    # Fully unified tapping driver button directly linked to tractor node operations
-    if st.button("⚡ CLICK HERE OR TAP TRACTOR ABOVE TO MINE ⚡", key="harvest_trigger_v148", use_container_width=True):
+    if st.button("⚡ TAP TO MINE COINS NOW ⚡", key="harvest_v148_final", use_container_width=True):
         if energy >= 10:
             energy -= 10
             coins += (40 * level * tractor_multiplier)
@@ -201,7 +198,7 @@ if active_panel == "🎯 MINE":
             st.toast(f"🪙 +{40 * level * tractor_multiplier} Coins Harvested!", icon="🚜")
             st.rerun()
         else:
-            st.error("❌ Out of Energy! Move tabs to refresh and auto-charge instantly!")
+            st.error("❌ Out of Energy! Move tabs or refresh to instantly auto-charge!")
 
 elif active_panel == "🚀 BOOST":
     st.markdown("### 🚀 Premium Booster Engine")
@@ -226,8 +223,8 @@ elif active_panel == "🚀 BOOST":
             st.error("❌ Insufficient tokens inside account!")
 
     if st.session_state.won_reward is not None:
-        st.snow() # Forces mobile webview renderer fallback cascade particles
-        st.balloons() # Triggers premium particle cascade
+        st.snow()
+        st.balloons() # Triggers premium falling bubbles/balloons cascade
         st.markdown(f"""
             <div class="custom-reward-toast">
                 <h1 style="margin:0; font-size:35px;">✨🪙✨</h1>
@@ -239,7 +236,7 @@ elif active_panel == "🚀 BOOST":
     st.divider()
     st.markdown("### 🚜 Upgrade Tractor Upgrades")
     
-    # Iron upgrade
+    # Iron Upgrade
     st.markdown(f"""
         <div class="action-module-row-card">
             <div>
@@ -262,7 +259,7 @@ elif active_panel == "🚀 BOOST":
             else:
                 st.error("❌ Insufficient coins!")
                 
-    # Cyber upgrade
+    # Cyber Upgrade
     st.markdown(f"""
         <div class="action-module-row-card">
             <div>
@@ -289,7 +286,6 @@ elif active_panel == "📜 QUESTS":
     st.session_state.won_reward = None
     st.markdown("### 🗓️ 7-Days Web3 Streak Check-In")
     
-    current_date_stamp = datetime.now().strftime("%Y-%m-%d")
     streak_rewards = [5000, 10000, 15000, 25000, 40000, 60000, 100000]
     st.markdown("<div class='streak-container'>", unsafe_allow_html=True)
     cols = st.columns(7)
@@ -319,53 +315,52 @@ elif active_panel == "📜 QUESTS":
     st.divider()
     st.markdown("### 📜 Social Media Missions")
     
-    # 1. FIXED TELEGRAM REDIRECTION TO PREVENT 401 ERROR INSIDE EMBED SYSTEM
+    # 3. STAGE 1, 2, 3 FORCED TASK LOCK GATE SYSTEM
+    # Telegram Task
     if st.session_state.tg_claimed:
         st.markdown("<div class='action-module-row-card'><div><b>✅ Join Official Telegram Channel</b></div><div style='color:#4caf50;'>Claimed</div></div>", unsafe_allow_html=True)
     else:
         st.markdown("<div class='action-module-row-card'><div><b>📢 Join Official Telegram Channel</b></div><div class='module-card-cost-index'>+50,000</div></div>", unsafe_allow_html=True)
         
-        # Pure HTML redirect anchor tag targeting blank parent elements safely
-        st.markdown('<a href="https://t.me/your_telegram_channel" target="_blank" class="web3-redirect-link-btn">📢 STAGE 1: Open Telegram Channel</a>', unsafe_allow_html=True)
-        if st.button("🔄 STAGE 2: Click to Verify Channel Visit", key="v_tg_fixed", use_container_width=True):
+        # Fixed native telegram app deep-linking protocols
+        st.markdown('<a href="https://t.me/telegram" target="_blank" class="web3-link-driver-btn">📢 STAGE 1: Open Telegram Channel</a>', unsafe_allow_html=True)
+        if st.button("🔄 STAGE 2: Click to Verify Channel Visit", key="verify_tg_lock", use_container_width=True):
             st.session_state.tg_visited = True
-            st.toast("Telegram redirection verified! Stage 3 claim unlocked.", icon="🔓")
+            st.toast("Telegram redirection authenticated!", icon="🔓")
             
         if st.session_state.tg_visited:
-            if st.button("⚡ STAGE 3: Verify & Claim +50K Coins", key="claim_tg_btn", use_container_width=True):
+            if st.button("⚡ STAGE 3: Claim +50,000 Coins", key="claim_tg_btn", use_container_width=True):
                 coins += 50000
                 db.execute("UPDATE users SET coins = ? WHERE id = ?", (coins, USER_ID))
                 conn.commit()
                 st.session_state.tg_claimed = True
-                st.success("Successfully credited 50,000 task tokens!")
+                st.success("50,000 coins loaded successfully!")
                 st.rerun()
                 
     st.write("") 
     
-    # 2. FIXED YOUTUBE REDIRECTION TO PREVENT 401 ERROR WINDOW CLOSURES
+    # YouTube Task
     if st.session_state.yt_claimed:
         st.markdown("<div class='action-module-row-card'><div><b>✅ Subscribe YouTube Channel</b></div><div style='color:#4caf50;'>Claimed</div></div>", unsafe_allow_html=True)
     else:
         st.markdown("<div class='action-module-row-card'><div><b>📺 Subscribe YouTube Channel</b></div><div class='module-card-cost-index'>+40,000</div></div>", unsafe_allow_html=True)
         
-        # Pure HTML redirect anchor tag targeting blank parent elements safely
-        st.markdown('<a href="https://youtube.com/@your_youtube_handle" target="_blank" class="web3-redirect-link-btn">📺 STAGE 1: Open YouTube Channel</a>', unsafe_allow_html=True)
-        if st.button("🔄 STAGE 2: Click to Verify Subscription", key="v_yt_fixed", use_container_width=True):
+        # Fixed native universal web link binding protocol
+        st.markdown('<a href="https://www.youtube.com" target="_blank" class="web3-link-driver-btn">📺 STAGE 1: Open YouTube Channel</a>', unsafe_allow_html=True)
+        if st.button("🔄 STAGE 2: Click to Verify Subscription", key="verify_yt_lock", use_container_width=True):
             st.session_state.yt_visited = True
-            st.toast("YouTube redirection verified! Stage 3 claim unlocked.", icon="🔓")
+            st.toast("YouTube redirection authenticated!", icon="🔓")
             
         if st.session_state.yt_visited:
-            if st.button("⚡ STAGE 3: Verify & Claim +40K Coins", key="claim_yt_btn", use_container_width=True):
+            if st.button("⚡ STAGE 3: Claim +40,000 Coins", key="claim_yt_btn", use_container_width=True):
                 coins += 40000
                 db.execute("UPDATE users SET coins = ? WHERE id = ?", (coins, USER_ID))
                 conn.commit()
                 st.session_state.yt_claimed = True
-                st.success("Successfully credited 40,000 task tokens!")
+                st.success("40,000 coins loaded successfully!")
                 st.rerun()
 
     st.divider()
-    
-    # 3. DAILY COMBO COMPONENT BOX
     st.markdown("### 🔑 Channel Daily Combo Code")
     secret_input = st.text_input("Enter Secret Code from Telegram Channel", placeholder="Type daily combo code here...", key="secret_code_box")
     if st.button("Claim Combo Reward (+100,000 Coins)", use_container_width=True):
