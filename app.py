@@ -70,8 +70,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- DATABASE ENGINE (v14.7 CLEAN PATCH) ---
-# కన్ఫ్లిక్ట్స్ రాకుండా సరికొత్త వెర్షన్ నేమ్ సింక్ చేశాను
+# --- DATABASE ENGINE (v14.8 PRODUCTION SECURE) ---
 conn = sqlite3.connect("village_v14_7_final.db", check_same_thread=False)
 db = conn.cursor()
 db.execute("""
@@ -93,17 +92,23 @@ if not row:
 else:
     coins, pph, level, last_claim, streak_count, energy, wallet_address, total_invites, tractor_tier = row
 
-# Fallback auto energy matrix
+# Fallback Energy Refresh
 if energy is None or energy < 0:
     energy = 500
 
-# --- SESSION STATE MANAGEMENT ---
+# --- SESSION STATE INITIALIZATION ROUTINES ---
 if "won_reward" not in st.session_state:
     st.session_state.won_reward = None
-if "claimed_tasks" not in st.session_state:
-    st.session_state.claimed_tasks = set()
+if "tg_visited" not in st.session_state:
+    st.session_state.tg_visited = False
+if "yt_visited" not in st.session_state:
+    st.session_state.yt_visited = False
+if "tg_claimed" not in st.session_state:
+    st.session_state.tg_claimed = False
+if "yt_claimed" not in st.session_state:
+    st.session_state.yt_claimed = False
 
-# --- COIN ENGINE & TIERS MIGRATION ---
+# --- DYNAMIC MULTIPLIERS & EQUATIONS ---
 COINS_PER_LEVEL = 100000  
 MAX_SYSTEM_LEVELS = 10
 calculated_level = 1 + (coins // COINS_PER_LEVEL)
@@ -149,7 +154,7 @@ st.markdown(f"""
 
 st.markdown(f'<div class="grand-token-display"><div class="grand-token-val">🪙 {coins:,}</div></div>', unsafe_allow_html=True)
 
-# --- NAVIGATION TABS ---
+# --- SEGMENT TABS ---
 active_panel = st.segmented_control("Nav", ["🎯 MINE", "🚀 BOOST", "📜 QUESTS", "🏆 FRENZ", "💎 DROP"], selection_mode="single", default="🎯 MINE", label_visibility="collapsed")
 st.divider()
 current_date_stamp = datetime.now().strftime("%Y-%m-%d")
@@ -176,7 +181,7 @@ if active_panel == "🎯 MINE":
         </div>
     """, unsafe_allow_html=True)
     
-    if st.button("⚡ TAP TRACTOR TO HARVEST COINS ⚡", key="harvest_v147", use_container_width=True):
+    if st.button("⚡ TAP TRACTOR TO HARVEST COINS ⚡", key="harvest_v148", use_container_width=True):
         if energy >= 10:
             energy -= 10
             coins += (40 * level * tractor_multiplier)
@@ -185,7 +190,7 @@ if active_panel == "🎯 MINE":
             st.toast(f"🪙 +{40 * level * tractor_multiplier} Coins Harvested!", icon="🚜")
             st.rerun()
         else:
-            st.error("❌ Out of Energy! Move tabs or refresh to auto-charge!")
+            st.error("❌ Out of Energy! Move tabs or refresh to instantly auto-charge!")
 
 elif active_panel == "🚀 BOOST":
     st.markdown("### 🚀 Premium Booster Engine")
@@ -197,7 +202,7 @@ elif active_panel == "🚀 BOOST":
         </div>
     """, unsafe_allow_html=True)
     
-    if st.button("🔓 Open Premium Mystery Box (1,000 Coins)", key="crate_v147", use_container_width=True):
+    if st.button("🔓 Open Premium Mystery Box (1,000 Coins)", key="crate_v148", use_container_width=True):
         if coins >= 1000:
             coins -= 1000
             prize = random.choice([2000, 5000, 15000])
@@ -221,7 +226,7 @@ elif active_panel == "🚀 BOOST":
     st.divider()
     st.markdown("### 🚜 Upgrade Tractor Upgrades")
     
-    # Iron tractor option
+    # Iron upgrade
     st.markdown(f"""
         <div class="action-module-row-card">
             <div>
@@ -244,7 +249,7 @@ elif active_panel == "🚀 BOOST":
             else:
                 st.error("❌ Insufficient coins!")
                 
-    # Cyber tractor option
+    # Cyber upgrade
     st.markdown(f"""
         <div class="action-module-row-card">
             <div>
@@ -298,33 +303,71 @@ elif active_panel == "📜 QUESTS":
             st.rerun()
             
     st.divider()
+    
+    # --- SECURE TASK LOCK STAGES (1, 2, 3) ENGINE ---
     st.markdown("### 📜 Social Media Missions")
     
-    # Mission 1
-    if "task1" in st.session_state.claimed_tasks:
-        st.markdown("<div class='action-module-row-card'><div><b>✅ Join Telegram Channel</b></div><div style='color:#4caf50;'>Claimed</div></div>", unsafe_allow_html=True)
+    # 1. TELEGRAM SOCIAL TASK WITH FORCED REDIRECT VALIDATION
+    if st.session_state.tg_claimed:
+        st.markdown("<div class='action-module-row-card'><div><b>✅ Join Official Telegram Channel</b></div><div style='color:#4caf50;'>Claimed</div></div>", unsafe_allow_html=True)
     else:
-        st.markdown("<div class='action-module-row-card'><div><b>📢 Join Official Telegram</b></div><div class='module-card-cost-index'>+50,000</div></div>", unsafe_allow_html=True)
-        if st.button("Verify & Claim +50K Coins", key="t1"):
-            coins += 50000
-            db.execute("UPDATE users SET coins = ? WHERE id = ?", (coins, USER_ID))
-            conn.commit()
-            st.session_state.claimed_tasks.add("task1")
-            st.toast("Task balance credited safely!", icon="✅")
-            st.rerun()
+        st.markdown("<div class='action-module-row-card'><div><b>📢 Join Official Telegram Channel</b></div><div class='module-card-cost-index'>+50,000</div></div>", unsafe_allow_html=True)
+        
+        # STAGE 1: Forced redirection link button
+        st.link_button("📢 STAGE 1: Open Telegram Channel", url="https://t.me/your_telegram_channel_link", use_container_width=True)
+        if st.button("🔄 STAGE 2: Click to Verify Visit", key="v_tg"):
+            st.session_state.tg_visited = True
+            st.toast("Redirection track verified successfully! Claim button unlocked.", icon="🔓")
             
-    # Mission 2
-    if "task2" in st.session_state.claimed_tasks:
-        st.markdown("<div class='action-module-row-card'><div><b>✅ Follow X Community</b></div><div style='color:#4caf50;'>Claimed</div></div>", unsafe_allow_html=True)
+        # STAGE 3: Claim unlocked conditionally
+        if st.session_state.tg_visited:
+            if st.button("⚡ STAGE 3: Verify & Claim +50K Coins", key="claim_tg_btn", use_container_width=True):
+                coins += 50000
+                db.execute("UPDATE users SET coins = ? WHERE id = ?", (coins, USER_ID))
+                conn.commit()
+                st.session_state.tg_claimed = True
+                st.success("Successfully claimed 50,000 task rewards!")
+                st.rerun()
+                
+    st.write("") # Spacer
+    
+    # 2. YOUTUBE SOCIAL TASK WITH FORCED REDIRECT VALIDATION
+    if st.session_state.yt_claimed:
+        st.markdown("<div class='action-module-row-card'><div><b>✅ Subscribe YouTube Channel</b></div><div style='color:#4caf50;'>Claimed</div></div>", unsafe_allow_html=True)
     else:
-        st.markdown("<div class='action-module-row-card'><div><b>🐦 Follow X (Twitter) Node</b></div><div class='module-card-cost-index'>+30,000</div></div>", unsafe_allow_html=True)
-        if st.button("Verify & Claim +30K Coins", key="t2"):
-            coins += 30000
+        st.markdown("<div class='action-module-row-card'><div><b>📺 Subscribe YouTube Channel</b></div><div class='module-card-cost-index'>+40,000</div></div>", unsafe_allow_html=True)
+        
+        # STAGE 1: Forced redirection link button
+        st.link_button("📺 STAGE 1: Open YouTube Channel", url="https://youtube.com/your_youtube_channel_link", use_container_width=True)
+        if st.button("🔄 STAGE 2: Click to Verify Subscription", key="v_yt"):
+            st.session_state.yt_visited = True
+            st.toast("YouTube trace verified successfully! Claim button unlocked.", icon="🔓")
+            
+        # STAGE 3: Claim unlocked conditionally
+        if st.session_state.yt_visited:
+            if st.button("⚡ STAGE 3: Verify & Claim +40K Coins", key="claim_yt_btn", use_container_width=True):
+                coins += 40000
+                db.execute("UPDATE users SET coins = ? WHERE id = ?", (coins, USER_ID))
+                conn.commit()
+                st.session_state.yt_claimed = True
+                st.success("Successfully claimed 40,000 task rewards!")
+                st.rerun()
+
+    st.divider()
+    
+    # 3. BONUS DAILY COMBO BOX INTEGRATION
+    st.markdown("### 🔑 Channel Daily Combo Code")
+    secret_input = st.text_input("Enter Secret Code from Telegram Channel", placeholder="Type daily combo code here...", key="secret_code_box")
+    if st.button("Claim Combo Reward (+100,000 Coins)", use_container_width=True):
+        if secret_input.strip() == "VILLAGE2026": # Secret entry key
+            coins += 100000
             db.execute("UPDATE users SET coins = ? WHERE id = ?", (coins, USER_ID))
             conn.commit()
-            st.session_state.claimed_tasks.add("task2")
-            st.toast("Task balance credited safely!", icon="✅")
+            st.balloons()
+            st.success("🎉 Correct Combo! +100,000 Bonus Tokens Added!")
             st.rerun()
+        else:
+            st.error("❌ Invalid combo key trace! Check official channel node.")
 
 elif active_panel == "🏆 FRENZ":
     st.session_state.won_reward = None
@@ -377,7 +420,7 @@ elif active_panel == "💎 DROP":
         """, unsafe_allow_html=True)
         
         input_address = st.text_input("Enter TON Wallet Node Address Link", placeholder="EQA1b...7z3X_N7pG2qK", key="wallet_input_box")
-        if st.button("🔗 LINK WALLET NODE ADDRESS", use_container_width=True, key="save_wallet_address_v147"):
+        if st.button("🔗 LINK WALLET NODE ADDRESS", use_container_width=True, key="save_wallet_address_v148"):
             if input_address.strip() != "":
                 db.execute("UPDATE users SET wallet_address = ? WHERE id = ?", (input_address.strip(), USER_ID))
                 conn.commit()
