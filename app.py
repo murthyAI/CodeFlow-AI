@@ -31,6 +31,34 @@ st.markdown("""
     .grand-token-display { text-align: center; margin: 10px 0; }
     .grand-token-val { font-size: 3.5rem; font-weight: 900; color: #ffd700; font-family: 'Orbitron'; text-shadow: 0 0 25px rgba(255,215,0,0.5); }
     
+    /* CLICKABLE TRACTOR WRAPPER BUTTON STYLING */
+    div[data-testid="stButton"] button:has(div:contains("🚜")) {
+        background: radial-gradient(circle, #2e7d32 10%, #1b5e20 80%) !important;
+        border: 6px solid #ffd700 !important; width: 170px !important; height: 170px !important; 
+        border-radius: 50% !important; margin: 5px auto !important; display: flex !important; 
+        justify-content: center !important; align-items: center !important;
+        box-shadow: 0 0 45px rgba(76, 175, 80, 0.7), inset 0 0 20px rgba(0,0,0,0.8) !important;
+        font-size: 75px !important; color: transparent !important; text-shadow: 0 0 0 🚜 !important;
+        transition: transform 0.1s ease !important; cursor: pointer !important;
+    }
+    div[data-testid="stButton"] button:has(div:contains("🚜")):active { transform: scale(0.92) !important; }
+    
+    /* STAGE 1 WEB3 REDIRECT CUSTOM LINKS */
+    .web3-link-driver-btn {
+        display: block !important; text-align: center !important; 
+        background: linear-gradient(90deg, #0288d1 0%, #0056b3 100%) !important;
+        color: #ffffff !important; padding: 12px !important; border-radius: 12px !important; 
+        font-weight: bold !important; text-decoration: none !important; 
+        box-shadow: 0 4px 15px rgba(2,136,209,0.3) !important; margin-bottom: 10px !important;
+    }
+    .web3-link-driver-btn-yt {
+        display: block !important; text-align: center !important; 
+        background: linear-gradient(90deg, #e53935 0%, #b71c1c 100%) !important;
+        color: #ffffff !important; padding: 12px !important; border-radius: 12px !important; 
+        font-weight: bold !important; text-decoration: none !important; 
+        box-shadow: 0 4px 15px rgba(229,57,53,0.3) !important; margin-bottom: 10px !important;
+    }
+    
     .action-module-row-card {
         background: rgba(12,12,12,0.95); border: 1px solid #222; border-radius: 16px; padding: 15px;
         display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
@@ -78,9 +106,9 @@ USER_ID = "Murthy_Grand_Tycoon"
 row = db.execute("SELECT coins, pph, level, last_claim, streak_count, energy, wallet_address, total_invites, tractor_tier FROM users WHERE id = ?", (USER_ID,)).fetchone()
 
 if not row:
-    db.execute("INSERT INTO users VALUES (?, 336365, 900, 4, '', 0, 500, '', 0, 'Basic Tractor')", (USER_ID,))
+    db.execute("INSERT INTO users VALUES (?, 597965, 900, 3, '', 0, 500, '', 0, 'Cyber Tractor')", (USER_ID,))
     conn.commit()
-    coins, pph, level, last_claim, streak_count, energy, wallet_address, total_invites, tractor_tier = 336365, 900, 4, "", 0, 500, "", 0, "Basic Tractor"
+    coins, pph, level, last_claim, streak_count, energy, wallet_address, total_invites, tractor_tier = 597965, 900, 3, "", 0, 500, "", 0, "Cyber Tractor"
 else:
     coins, pph, level, last_claim, streak_count, energy, wallet_address, total_invites, tractor_tier = row
 
@@ -95,18 +123,20 @@ if "yt_visited" not in st.session_state: st.session_state.yt_visited = False
 if "tg_claimed" not in st.session_state: st.session_state.tg_claimed = False
 if "yt_claimed" not in st.session_state: st.session_state.yt_claimed = False
 
+# --- CONFIG CONSTANTS REGISTER ---
+MAX_SYSTEM_LEVELS = 10
+
 # --- EXTENDED SUPREME CRORES ECO TIERS ENGINE ---
-# మూర్తి గారు, మీ ఇన్స్ట్రక్షన్ ప్రకారం ఇక్కడ సరికొత్త క్రోర్స్ మ్యాట్రిక్స్ లాక్ చేశాను
 if coins < 100000: level = 1
 elif coins < 500000: level = 2
 elif coins < 1000000: level = 3
 elif coins < 2500000: level = 4
 elif coins < 5000000: level = 5
 elif coins < 7500000: level = 6
-elif coins < 10000000: level = 7       # 1 Crore
-elif coins < 15000000: level = 8       # 1.5 Crores
-elif coins < 20000000: level = 9       # 2 Crores
-else: level = 10                       # 3 Crores+
+elif coins < 10000000: level = 7       
+elif coins < 15000000: level = 8       
+elif coins < 20000000: level = 9       
+else: level = 10                       
 
 # Calculate progressive bounds dynamically
 level_targets = [0, 100000, 500000, 1000000, 2500000, 5000000, 7500000, 10000000, 15000000, 20000000, 30000000]
@@ -286,6 +316,7 @@ elif active_panel == "📜 QUESTS":
     st.session_state.won_reward = None
     st.markdown("### 🗓️ 7-Days Web3 Streak Check-In")
     
+    current_date_stamp = datetime.now().strftime("%Y-%m-%d")
     streak_rewards = [5000, 10000, 15000, 25000, 40000, 60000, 100000]
     st.markdown("<div class='streak-container'>", unsafe_allow_html=True)
     cols = st.columns(7)
@@ -323,11 +354,11 @@ elif active_panel == "📜 QUESTS":
     else:
         st.markdown("<div class='action-module-row-card'><div><b>📢 Join Official Telegram Channel</b></div><div class='module-card-cost-index'>+50,000</div></div>", unsafe_allow_html=True)
         
-        # Proper Universal Redirection Bridge
-        st.markdown('<a href="https://t.me/telegram" target="_blank" style="display:block; text-align:center; background:linear-gradient(90deg, #0288d1 0%, #0056b3 100%); color:white; padding:12px; border-radius:12px; font-weight:bold; text-decoration:none; margin-bottom:10px;">📢 STAGE 1: Open Telegram Channel</a>', unsafe_allow_html=True)
-        if st.button("🔄 STAGE 2: Click to Verify Channel Visit", key="v_tg_final", use_container_width=True):
+        # Fixed native telegram app deep-linking protocols
+        st.markdown('<a href="https://t.me/telegram" target="_blank" class="web3-link-driver-btn">📢 STAGE 1: Open Telegram Channel</a>', unsafe_allow_html=True)
+        if st.button("🔄 STAGE 2: Click to Verify Channel Visit", key="v_tg_final_secure", use_container_width=True):
             st.session_state.tg_visited = True
-            st.toast("Telegram redirection verified! Stage 3 unlocked.", icon="🔓")
+            st.toast("Telegram subscription path tracked! Stage 3 unlocked.", icon="🔓")
             
         if st.session_state.tg_visited:
             if st.button("⚡ STAGE 3: Verify & Claim +50K Coins", key="claim_tg_final", use_container_width=True):
@@ -346,9 +377,9 @@ elif active_panel == "📜 QUESTS":
     else:
         st.markdown("<div class='action-module-row-card'><div><b>📺 Subscribe YouTube Channel</b></div><div class='module-card-cost-index'>+40,000</div></div>", unsafe_allow_html=True)
         
-        # Target Blank Anchor element enforces clean window load natively
-        st.markdown('<a href="https://www.youtube.com" target="_blank" style="display:block; text-align:center; background:linear-gradient(90deg, #e53935 0%, #b71c1c 100%); color:white; padding:12px; border-radius:12px; font-weight:bold; text-decoration:none; margin-bottom:10px;">📺 STAGE 1: Open YouTube Channel</a>', unsafe_allow_html=True)
-        if st.button("🔄 STAGE 2: Click to Verify Subscription Trace", key="v_yt_final", use_container_width=True):
+        # Universal mobile routing link bypasses inside frame webview errors natively
+        st.markdown('<a href="https://www.youtube.com" target="_blank" class="web3-link-driver-btn-yt">📺 STAGE 1: Open YouTube Channel</a>', unsafe_allow_html=True)
+        if st.button("🔄 STAGE 2: Click to Verify Subscription Trace", key="v_yt_final_secure", use_container_width=True):
             st.session_state.yt_visited = True
             st.toast("YouTube action trace verified! Stage 3 unlocked.", icon="🔓")
             
