@@ -31,26 +31,6 @@ st.markdown("""
     .grand-token-display { text-align: center; margin: 10px 0; }
     .grand-token-val { font-size: 3.5rem; font-weight: 900; color: #ffd700; font-family: 'Orbitron'; text-shadow: 0 0 25px rgba(255,215,0,0.5); }
     
-    /* 1. FIXED TOTAL INTERACTIVE CLICKABLE ENVELOPE FOR TRACTOR EMOJI NODE */
-    .tractor-big-link-node {
-        display: block; width: 170px; height: 170px; border-radius: 50%; margin: 10px auto;
-        background: radial-gradient(circle, #2e7d32 10%, #1b5e20 80%);
-        border: 6px solid #ffd700; text-align: center; line-height: 158px;
-        box-shadow: 0 0 45px rgba(76, 175, 80, 0.7), inset 0 0 20px rgba(0,0,0,0.8);
-        font-size: 80px; text-decoration: none !important; user-select: none;
-        transition: transform 0.1s ease; cursor: pointer;
-    }
-    .tractor-big-link-node:active { transform: scale(0.92); }
-
-    /* 2. FIXED REDIRECTION STAGE EMBEDDED ENGINE BUTTONS */
-    .web3-link-driver-btn {
-        display: block !important; text-align: center !important; 
-        background: linear-gradient(90deg, #0288d1 0%, #0056b3 100%) !important;
-        color: #ffffff !important; padding: 12px !important; border-radius: 12px !important; 
-        font-weight: bold !important; text-decoration: none !important; 
-        box-shadow: 0 4px 15px rgba(2,136,209,0.3) !important; margin-bottom: 10px !important;
-    }
-    
     .action-module-row-card {
         background: rgba(12,12,12,0.95); border: 1px solid #222; border-radius: 16px; padding: 15px;
         display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
@@ -82,7 +62,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- DATABASE LOGISTICS (v14.8 CORE LEDGER) ---
+# --- DATABASE ENGINE ---
 conn = sqlite3.connect("village_v14_7_final.db", check_same_thread=False)
 db = conn.cursor()
 db.execute("""
@@ -104,25 +84,37 @@ if not row:
 else:
     coins, pph, level, last_claim, streak_count, energy, wallet_address, total_invites, tractor_tier = row
 
-# Session State Cache Initializers
+# Fallback Energy Automatic Recharge
+if energy is None or energy < 0:
+    energy = 500
+
+# --- SESSION STATES ---
 if "won_reward" not in st.session_state: st.session_state.won_reward = None
 if "tg_visited" not in st.session_state: st.session_state.tg_visited = False
 if "yt_visited" not in st.session_state: st.session_state.yt_visited = False
 if "tg_claimed" not in st.session_state: st.session_state.tg_claimed = False
 if "yt_claimed" not in st.session_state: st.session_state.yt_claimed = False
 
-# Automatic Energy Cap Fluidity
-if energy is None or energy < 0:
-    energy = 500
+# --- EXTENDED SUPREME CRORES ECO TIERS ENGINE ---
+# మూర్తి గారు, మీ ఇన్స్ట్రక్షన్ ప్రకారం ఇక్కడ సరికొత్త క్రోర్స్ మ్యాట్రిక్స్ లాక్ చేశాను
+if coins < 100000: level = 1
+elif coins < 500000: level = 2
+elif coins < 1000000: level = 3
+elif coins < 2500000: level = 4
+elif coins < 5000000: level = 5
+elif coins < 7500000: level = 6
+elif coins < 10000000: level = 7       # 1 Crore
+elif coins < 15000000: level = 8       # 1.5 Crores
+elif coins < 20000000: level = 9       # 2 Crores
+else: level = 10                       # 3 Crores+
 
-# --- MATH METRIC ALGORITHMS ---
-COINS_PER_LEVEL = 100000  
-MAX_SYSTEM_LEVELS = 10
-calculated_level = 1 + (coins // COINS_PER_LEVEL)
-level = min(calculated_level, MAX_SYSTEM_LEVELS)
-next_target = level * COINS_PER_LEVEL
+# Calculate progressive bounds dynamically
+level_targets = [0, 100000, 500000, 1000000, 2500000, 5000000, 7500000, 10000000, 15000000, 20000000, 30000000]
+next_target = level_targets[level]
 points_needed = max(0, next_target - coins)
-progress_bar_val = min(int(((coins % COINS_PER_LEVEL) / COINS_PER_LEVEL) * 100), 100)
+previous_target = level_targets[level - 1]
+progress_denominator = max(1, next_target - previous_target)
+progress_bar_val = min(int(((coins - previous_target) / progress_denominator) * 100), 100)
 
 tractor_multiplier = 1
 if tractor_tier == "Iron Tractor": tractor_multiplier = 2
@@ -161,10 +153,9 @@ st.markdown(f"""
 
 st.markdown(f'<div class="grand-token-display"><div class="grand-token-val">🪙 {coins:,}</div></div>', unsafe_allow_html=True)
 
-# --- PANEL CONTROLLER ---
+# --- NAVIGATION TABS ---
 active_panel = st.segmented_control("Nav", ["🎯 MINE", "🚀 BOOST", "📜 QUESTS", "🏆 FRENZ", "💎 DROP"], selection_mode="single", default="🎯 MINE", label_visibility="collapsed")
 st.divider()
-current_date_stamp = datetime.now().strftime("%Y-%m-%d")
 
 if active_panel == "🎯 MINE":
     st.session_state.won_reward = None
@@ -180,16 +171,25 @@ if active_panel == "🎯 MINE":
         
     st.progress(progress_bar_val / 100)
     
-    # 1. FIXED INTERACTIVE CLICKABLE EMOJI BLOCK
-    st.markdown('<div class="tractor-big-link-node">🚜</div>', unsafe_allow_html=True)
-    
+    # 1. FIXED TOTAL INTERACTIVE BIG CLICKABLE ENVELOPE FOR TRACTOR COIN TAP
+    cols_center = st.columns([1, 2, 1])
+    with cols_center[1]:
+        if st.button("🚜", key="big_tractor_node_btn_v149", use_container_width=True):
+            if energy >= 10:
+                energy -= 10
+                coins += (40 * level * tractor_multiplier)
+                db.execute("UPDATE users SET coins = ?, energy = ? WHERE id = ?", (coins, energy, USER_ID))
+                conn.commit()
+                st.toast(f"🪙 +{40 * level * tractor_multiplier} Coins Harvested!", icon="🚜")
+                st.rerun()
+            
     st.markdown(f"""
-        <div style="text-align:center; font-weight:bold; font-size:13px; margin-bottom:10px;">
+        <div style="text-align:center; font-weight:bold; font-size:13px; margin-top:5px; margin-bottom:15px;">
             <span style="color:#ffd700;">⚡ ENERGY: {energy} / 500</span> | <span style="color:#777;">Skin: {tractor_tier}</span>
         </div>
     """, unsafe_allow_html=True)
     
-    if st.button("⚡ TAP TO MINE COINS NOW ⚡", key="harvest_v148_final", use_container_width=True):
+    if st.button("⚡ CLICK HERE TO HARVEST COINS ⚡", key="harvest_text_btn_v149", use_container_width=True):
         if energy >= 10:
             energy -= 10
             coins += (40 * level * tractor_multiplier)
@@ -198,7 +198,7 @@ if active_panel == "🎯 MINE":
             st.toast(f"🪙 +{40 * level * tractor_multiplier} Coins Harvested!", icon="🚜")
             st.rerun()
         else:
-            st.error("❌ Out of Energy! Move tabs or refresh to instantly auto-charge!")
+            st.error("❌ Out of Energy! Move tabs or refresh to auto-charge instantly!")
 
 elif active_panel == "🚀 BOOST":
     st.markdown("### 🚀 Premium Booster Engine")
@@ -210,7 +210,7 @@ elif active_panel == "🚀 BOOST":
         </div>
     """, unsafe_allow_html=True)
     
-    if st.button("🔓 Open Premium Mystery Box (1,000 Coins)", key="crate_v148", use_container_width=True):
+    if st.button("🔓 Open Premium Mystery Box (1,000 Coins)", key="crate_v149", use_container_width=True):
         if coins >= 1000:
             coins -= 1000
             prize = random.choice([2000, 5000, 15000])
@@ -224,11 +224,11 @@ elif active_panel == "🚀 BOOST":
 
     if st.session_state.won_reward is not None:
         st.snow()
-        st.balloons() # Triggers premium falling bubbles/balloons cascade
+        st.balloons()
         st.markdown(f"""
             <div class="custom-reward-toast">
                 <h1 style="margin:0; font-size:35px;">✨🪙✨</h1>
-                <h3 style="color:#ffd700; margin:5px 0; font-family:'Orbitron'; font-weight:900;">CRATE UNLOCKED</h3>
+                <h3 style="color:#ffd700; margin:5px 0; font-family:'Orbitron'; font-weight:900;">CRATE UNLOCKED SUCCESS</h3>
                 <h1 style="color:#ffffff; margin:5px 0; font-family:'Orbitron'; font-weight:900; font-size:30px;">+{st.session_state.won_reward:,} COINS</h1>
             </div>
         """, unsafe_allow_html=True)
@@ -313,54 +313,57 @@ elif active_panel == "📜 QUESTS":
             st.rerun()
             
     st.divider()
+    
+    # --- SOCIAL MEDIA STAGE 1, 2, 3 ENGINE ---
     st.markdown("### 📜 Social Media Missions")
     
-    # 3. STAGE 1, 2, 3 FORCED TASK LOCK GATE SYSTEM
-    # Telegram Task
+    # 1. Telegram Verification Channel
     if st.session_state.tg_claimed:
         st.markdown("<div class='action-module-row-card'><div><b>✅ Join Official Telegram Channel</b></div><div style='color:#4caf50;'>Claimed</div></div>", unsafe_allow_html=True)
     else:
         st.markdown("<div class='action-module-row-card'><div><b>📢 Join Official Telegram Channel</b></div><div class='module-card-cost-index'>+50,000</div></div>", unsafe_allow_html=True)
         
-        # Fixed native telegram app deep-linking protocols
-        st.markdown('<a href="https://t.me/telegram" target="_blank" class="web3-link-driver-btn">📢 STAGE 1: Open Telegram Channel</a>', unsafe_allow_html=True)
-        if st.button("🔄 STAGE 2: Click to Verify Channel Visit", key="verify_tg_lock", use_container_width=True):
+        # Proper Universal Redirection Bridge
+        st.markdown('<a href="https://t.me/telegram" target="_blank" style="display:block; text-align:center; background:linear-gradient(90deg, #0288d1 0%, #0056b3 100%); color:white; padding:12px; border-radius:12px; font-weight:bold; text-decoration:none; margin-bottom:10px;">📢 STAGE 1: Open Telegram Channel</a>', unsafe_allow_html=True)
+        if st.button("🔄 STAGE 2: Click to Verify Channel Visit", key="v_tg_final", use_container_width=True):
             st.session_state.tg_visited = True
-            st.toast("Telegram redirection authenticated!", icon="🔓")
+            st.toast("Telegram redirection verified! Stage 3 unlocked.", icon="🔓")
             
         if st.session_state.tg_visited:
-            if st.button("⚡ STAGE 3: Claim +50,000 Coins", key="claim_tg_btn", use_container_width=True):
+            if st.button("⚡ STAGE 3: Verify & Claim +50K Coins", key="claim_tg_final", use_container_width=True):
                 coins += 50000
                 db.execute("UPDATE users SET coins = ? WHERE id = ?", (coins, USER_ID))
                 conn.commit()
                 st.session_state.tg_claimed = True
-                st.success("50,000 coins loaded successfully!")
+                st.success("Successfully credited 50,000 tokens!")
                 st.rerun()
                 
     st.write("") 
     
-    # YouTube Task
+    # 2. YouTube Verification Handle
     if st.session_state.yt_claimed:
         st.markdown("<div class='action-module-row-card'><div><b>✅ Subscribe YouTube Channel</b></div><div style='color:#4caf50;'>Claimed</div></div>", unsafe_allow_html=True)
     else:
         st.markdown("<div class='action-module-row-card'><div><b>📺 Subscribe YouTube Channel</b></div><div class='module-card-cost-index'>+40,000</div></div>", unsafe_allow_html=True)
         
-        # Fixed native universal web link binding protocol
-        st.markdown('<a href="https://www.youtube.com" target="_blank" class="web3-link-driver-btn">📺 STAGE 1: Open YouTube Channel</a>', unsafe_allow_html=True)
-        if st.button("🔄 STAGE 2: Click to Verify Subscription", key="verify_yt_lock", use_container_width=True):
+        # Target Blank Anchor element enforces clean window load natively
+        st.markdown('<a href="https://www.youtube.com" target="_blank" style="display:block; text-align:center; background:linear-gradient(90deg, #e53935 0%, #b71c1c 100%); color:white; padding:12px; border-radius:12px; font-weight:bold; text-decoration:none; margin-bottom:10px;">📺 STAGE 1: Open YouTube Channel</a>', unsafe_allow_html=True)
+        if st.button("🔄 STAGE 2: Click to Verify Subscription Trace", key="v_yt_final", use_container_width=True):
             st.session_state.yt_visited = True
-            st.toast("YouTube redirection authenticated!", icon="🔓")
+            st.toast("YouTube action trace verified! Stage 3 unlocked.", icon="🔓")
             
         if st.session_state.yt_visited:
-            if st.button("⚡ STAGE 3: Claim +40,000 Coins", key="claim_yt_btn", use_container_width=True):
+            if st.button("⚡ STAGE 3: Verify & Claim +40K Coins", key="claim_yt_final", use_container_width=True):
                 coins += 40000
                 db.execute("UPDATE users SET coins = ? WHERE id = ?", (coins, USER_ID))
                 conn.commit()
                 st.session_state.yt_claimed = True
-                st.success("40,000 coins loaded successfully!")
+                st.success("Successfully credited 40,000 tokens!")
                 st.rerun()
 
     st.divider()
+    
+    # 3. DAILY COMBO BOX
     st.markdown("### 🔑 Channel Daily Combo Code")
     secret_input = st.text_input("Enter Secret Code from Telegram Channel", placeholder="Type daily combo code here...", key="secret_code_box")
     if st.button("Claim Combo Reward (+100,000 Coins)", use_container_width=True):
