@@ -6,62 +6,65 @@ from datetime import datetime
 # --- APP CONFIG ---
 st.set_page_config(page_title="Village Mining AI", page_icon="🌾", layout="centered")
 
-# --- ULTIMATE PREMIUM CSS (HAMSTER KOMBAT STYLE) ---
-st.markdown("""
+# --- HIGH-END ULTRA PREMIUM CSS (THE CACHE BUSTER & TRUE GAMING RAY) ---
+st.markdown(f"""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Urbanist:wght@400;600;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Urbanist:wght@600;800;900&display=swap');
     
-    html, body, [class*="st-"] { font-family: 'Urbanist', sans-serif; background-color: #000; color: #fff; }
-    .stApp { background: radial-gradient(circle at 50% 20%, #1a3c1a 0%, #000 100%); }
+    html, body, [class*="st-"] {{ font-family: 'Urbanist', sans-serif; background-color: #000000; color: #ffffff; }}
+    .stApp {{ background: radial-gradient(circle at 50% 15%, #0b1f0b 0%, #010401 60%, #000000 100%); }}
     
-    /* Block Streamlit Elements */
-    [data-testid="stHeader"], [data-testid="stToolbar"] { display: none !important; }
+    /* Clear Bloat Elements */
+    [data-testid="stHeader"], [data-testid="stToolbar"] {{ display: none !important; }}
     
-    /* Header Card */
-    .header-card {
-        background: rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 15px;
+    /* Profile Header Layout */
+    .premium-header-card {{
+        background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 100%);
+        border-radius: 22px; padding: 12px 16px; border: 1px solid rgba(76, 175, 80, 0.35);
         display: flex; align-items: center; justify-content: space-between;
-        border: 1px solid #2e7d32; margin-bottom: 10px;
-    }
-    .profile-img { width: 45px; height: 45px; border-radius: 50%; border: 2px solid #ffd700; background: #222; text-align: center; line-height: 42px; font-size: 22px; }
+        box-shadow: 0 10px 30px rgba(0,0,0,0.6); margin-bottom: 15px;
+    }}
+    .profile-img-frame {{ width: 42px; height: 42px; border-radius: 50%; border: 2px solid #ffd700; background: #111; text-align: center; line-height: 38px; font-size: 20px; }}
 
-    /* Stats Box */
-    .stat-row { display: flex; gap: 8px; margin-bottom: 15px; }
-    .stat-box { background: #111; border: 1px solid #333; border-radius: 12px; padding: 8px; flex: 1; text-align: center; }
-    .stat-val { font-size: 0.85rem; font-weight: bold; color: #ffd700; font-family: 'Orbitron'; }
-    .stat-lbl { font-size: 0.55rem; color: #888; }
+    /* Multi-Stats Bar Row Grid */
+    .dashboard-stats-grid {{ display: flex; gap: 8px; margin-bottom: 15px; }}
+    .dashboard-stat-unit {{ background: rgba(10,10,10,0.9); border: 1px solid #1c1c1c; border-radius: 14px; padding: 10px; flex: 1; text-align: center; }}
+    .dashboard-stat-val {{ font-size: 0.9rem; font-weight: 900; color: #ffd700; font-family: 'Orbitron'; }}
+    .dashboard-stat-lbl {{ font-size: 0.55rem; color: #777; font-weight: bold; }}
 
-    /* Big Balance */
-    .balance-container { text-align: center; margin: 20px 0; }
-    .balance-val { font-size: 3.5rem; font-weight: 900; color: #ffd700; font-family: 'Orbitron'; text-shadow: 0 0 20px rgba(255,215,0,0.4); }
+    /* Main Token Balance Display Matrix */
+    .grand-token-display {{ text-align: center; margin: 10px 0; }}
+    .grand-token-val {{ font-size: 3.5rem; font-weight: 900; color: #ffd700; font-family: 'Orbitron'; text-shadow: 0 0 25px rgba(255,215,0,0.5); }}
 
-    /* TAPPER AREA */
-    .tapper-zone {
-        display: flex; justify-content: center; align-items: center;
-        background: radial-gradient(circle, rgba(76,175,80,0.25) 0%, rgba(0,0,0,0) 70%);
-        height: 180px; margin: 15px 0; border-radius: 50%;
-    }
-    
-    /* Mystery Box Premium Container */
-    .mystery-box-card {
-        background: linear-gradient(135deg, rgba(255,215,0,0.1) 0%, rgba(0,0,0,0.6) 100%);
-        border: 2px dashed #ffd700; border-radius: 20px; padding: 25px; text-align: center;
-        box-shadow: 0 0 25px rgba(255,215,0,0.2); margin-bottom: 20px;
-    }
+    /* HAMSTER KOMBAT BIG NEON CLICK ELEMENT */
+    .premium-interactive-coin-node {{
+        width: 180px; height: 180px; border-radius: 50%; margin: 15px auto;
+        background: radial-gradient(circle, #2e7d32 10%, #1b5e20 80%);
+        border: 6px solid #ffd700; display: flex; justify-content: center; align-items: center;
+        box-shadow: 0 0 45px rgba(76, 175, 80, 0.7), inset 0 0 20px rgba(0,0,0,0.8);
+        font-size: 85px; user-select: none;
+    }}
 
-    /* Premium Item Cards */
-    .premium-item-card {
-        background: rgba(15,15,15,0.85); border: 1px solid #222; border-radius: 16px; padding: 14px;
-        display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;
-    }
-    .item-title { font-weight: bold; font-size: 0.95rem; color: #fff; }
-    .item-desc { font-size: 0.7rem; color: #888; }
-    .item-cost { color: #ffd700; font-weight: 800; font-family: 'Orbitron'; font-size: 0.9rem; }
+    /* Premium Item Content Row Grid Layout */
+    .action-module-row-card {{
+        background: rgba(12,12,12,0.95); border: 1px solid #222; border-radius: 16px; padding: 15px;
+        display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
+    }}
+    .module-card-headline {{ font-weight: 800; font-size: 0.95rem; color: #fff; }}
+    .module-card-cost-index {{ color: #ffd700; font-weight: 900; font-family: 'Orbitron'; font-size: 0.9rem; }}
+
+    /* LIVE MONETIZATION ADVERTISING ZONE HEADER & STYLING */
+    .monetization-ad-banner {{
+        background: linear-gradient(90deg, rgba(255,215,0,0.05) 0%, rgba(76,175,80,0.05) 100%);
+        border: 1px dashed rgba(255,215,0,0.3); border-radius: 14px;
+        padding: 12px; text-align: center; margin-top: 25px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    }}
     </style>
 """, unsafe_allow_html=True)
 
-# --- DATABASE ENGINE ---
-conn = sqlite3.connect("village_v80_core.db", check_same_thread=False)
+# --- DATABASE CONTROL ENGINE (V12 MASTER TRAY) ---
+conn = sqlite3.connect("village_v12_masterbox.db", check_same_thread=False)
 db = conn.cursor()
 db.execute("CREATE TABLE IF NOT EXISTS users (id TEXT PRIMARY KEY, coins INTEGER, pph INTEGER, level INTEGER, last_claim TEXT)")
 conn.commit()
@@ -70,137 +73,134 @@ USER_ID = "Murthy_Grand_Tycoon"
 row = db.execute("SELECT coins, pph, level, last_claim FROM users WHERE id = ?", (USER_ID,)).fetchone()
 
 if not row:
-    db.execute("INSERT INTO users VALUES (?, 55000, 500, 1, '')", (USER_ID,))
+    db.execute("INSERT INTO users VALUES (?, 257605, 750, 1, '')", (USER_ID,))
     conn.commit()
-    coins, pph, level, last_claim = 55000, 500, 1, ""
+    coins, pph, level, last_claim = 257605, 750, 1, ""
 else:
     coins, pph, level, last_claim = row
 
-# --- LEVEL MECHANICS ---
+# --- LEVEL & PROGRESS MECHANICS ---
 COINS_PER_LEVEL = 10000
 level = 1 + (coins // COINS_PER_LEVEL)
 next_target = level * COINS_PER_LEVEL
-progress = min(int(((coins % COINS_PER_LEVEL) / COINS_PER_LEVEL) * 100), 100)
+progress_bar_val = min(int(((coins % COINS_PER_LEVEL) / COINS_PER_LEVEL) * 100), 100)
 
-# --- TOP PROFILE HEADER ---
+# --- HEADER COMPONENT ---
 st.markdown(f"""
-    <div class="header-card">
-        <div style="display:flex; align-items:center; gap:10px;">
-            <div class="profile-img">👨‍🌾</div>
+    <div class="premium-header-card">
+        <div style="display:flex; align-items:center; gap:12px;">
+            <div class="profile-img-frame">👨‍🌾</div>
             <div>
-                <div style="font-weight:bold; font-size:14px;">{USER_ID}</div>
-                <div style="color:#4caf50; font-size:10px;">LEVEL {level} • GRAND TYCOON</div>
+                <div style="font-weight:900; font-size:15px; letter-spacing:0.3px;">{USER_ID}</div>
+                <div style="color:#4caf50; font-size:10px; font-weight:bold;">LEVEL {level} • GRAND LANDLORD</div>
             </div>
         </div>
-        <div style="text-align:right; color:#888; font-size:10px;">AIRDROP<br><b style="color:#ffd700;">SEASON 1</b></div>
+        <div style="text-align:right; font-size:10px; font-weight:bold; color:#666;">AIRDROP<br><b style="color:#ffd700; font-family:'Orbitron';">SEASON 1</b></div>
     </div>
 """, unsafe_allow_html=True)
 
+# --- STATS ROW GRID ---
 st.markdown(f"""
-    <div class="stat-row">
-        <div class="stat-box"><div class="stat-lbl">PROFIT / HOUR</div><div class="stat-val">+{pph:,}</div></div>
-        <div class="stat-box"><div class="stat-lbl">MY RANK</div><div class="stat-val">#1,042</div></div>
-        <div class="stat-box"><div class="stat-lbl">MULTIPLIER</div><div class="stat-val">x{level}</div></div>
+    <div class="dashboard-stats-grid">
+        <div class="dashboard-stat-unit"><div class="dashboard-stat-lbl">PROFIT / HOUR</div><div class="dashboard-stat-val">⚡ +{pph:,}</div></div>
+        <div class="dashboard-stat-unit"><div class="dashboard-stat-lbl">GLOBAL RANK</div><div class="dashboard-stat-val">#1,042</div></div>
+        <div class="dashboard-stat-unit"><div class="dashboard-stat-lbl">MULTIPLIER</div><div class="dashboard-stat-val">x{level}</div></div>
     </div>
 """, unsafe_allow_html=True)
 
-# --- MAIN BALANCE DISPLAY ---
-st.markdown(f'<div class="balance-container"><div class="balance-val">🪙 {coins:,}</div></div>', unsafe_allow_html=True)
+# --- TOKEN BALANCE DISPLAY ---
+st.markdown(f'<div class="grand-token-display"><div class="grand-token-val">🪙 {coins:,}</div></div>', unsafe_allow_html=True)
 
-# --- RELIABLE NAVIGATION SYSTEM ---
-if 'current_page' not in st.session_state:
-    st.session_state.current_page = "🎯 MINE"
-
-col1, col2, col3, col4, col5 = st.columns(5)
-with col1: 
-    if st.button("🎯 MINE", use_container_width=True): st.session_state.current_page = "🎯 MINE"
-with col2: 
-    if st.button("🚀 BOOST", use_container_width=True): st.session_state.current_page = "🚀 BOOST"
-with col3: 
-    if st.button("📜 QUESTS", use_container_width=True): st.session_state.current_page = "📜 QUESTS"
-with col4: 
-    if st.button("🏆 FRENZ", use_container_width=True): st.session_state.current_page = "🏆 FRENZ"
-with col5: 
-    if st.button("💎 DROP", use_container_width=True): st.session_state.current_page = "💎 DROP"
+# --- NATIVE TABS NAVIGATION (ROBUST PANEL MATRIX) ---
+active_panel = st.segmented_control("Nav", ["🎯 MINE", "🚀 BOOST", "📜 QUESTS", "🏆 FRENZ", "💎 DROP"], selection_mode="single", default="🎯 MINE", label_visibility="collapsed")
 
 st.divider()
 
-current_today = datetime.now().strftime("%Y-%m-%d")
+current_date_stamp = datetime.now().strftime("%Y-%m-%d")
 
-# --- PAGE ENGINE CONTROLLERS ---
-if st.session_state.current_page == "🎯 MINE":
-    st.markdown(f"<div style='display:flex; justify-content:space-between; font-size:12px; color:#81c784; margin-bottom:5px;'><b>Level {level}</b> <b>Target: {next_target:,}</b></div>", unsafe_allow_html=True)
-    st.progress(progress / 100)
+# --- EXECUTIVE DISPLAY OPERATIONS ROUTER ---
+if active_panel == "🎯 MINE":
+    st.markdown(f"<div style='display:flex; justify-content:space-between; font-size:12px; color:#81c784; margin-bottom:4px; font-weight:bold;'><span>RANK EXP: {coins:,}</span><span>NEXT TARGET: {next_target:,}</span></div>", unsafe_allow_html=True)
+    st.progress(progress_bar_val / 100)
     
-    st.markdown('<div class="tapper-zone">', unsafe_allow_html=True)
-    # Refined dynamic click mechanism
-    if st.button("🚜 HARVEST ACTIVE TAP (Click Here)", key="tap_core", use_container_width=True):
-        coins += (15 * level)
+    # NATIVE INTERACTIVE CANVAS OVERLAY FOR TRACTOR
+    st.markdown('<div class="premium-interactive-coin-node">🚜</div>', unsafe_allow_html=True)
+    
+    if st.button("⚡ TAP TRACTOR TO HARVEST COINS ⚡", key="trigger_harvest_action_node", use_container_width=True):
+        coins += (30 * level)
         db.execute("UPDATE users SET coins = ? WHERE id = ?", (coins, USER_ID))
         conn.commit()
-        st.toast(f"🪙 +{15 * level} Coins Added to Balance!")
+        st.toast(f"🪙 +{30 * level} Tokens Extracted!", icon="🚜")
         st.rerun()
-    st.markdown('</div>', unsafe_allow_html=True)
 
-elif st.session_state.current_page == "🚀 BOOST":
-    st.markdown("### 🎁 Mystery Reward Box")
+elif active_panel == "🚀 BOOST":
+    st.markdown("### 🎁 Premium Ecosystem Mystery Crate")
     
     st.markdown("""
-        <div class="mystery-box-card">
-            <h1 style="font-size: 65px; margin: 0; padding: 0;">🎁</h1>
-            <h3 style="color:#ffd700; margin-top:10px; font-family:'Orbitron';">Premium Crypto Box</h3>
-            <p style="font-size:0.8rem; color:#aaa; margin:5px 0;">Unlock costs 1,000 coins. Instant chance to hit 15,000 token drops!</p>
+        <div style="background: linear-gradient(135deg, rgba(255,215,0,0.12) 0%, rgba(0,0,0,0.7) 100%); border: 2px dashed #ffd700; border-radius: 20px; padding: 22px; text-align: center; box-shadow: 0 0 25px rgba(255,215,0,0.25); margin-bottom: 20px;">
+            <h1 style="font-size: 65px; margin: 0; filter: drop-shadow(0 0 10px rgba(255,215,0,0.5));">🎁</h1>
+            <h3 style="color:#ffd700; margin-top:10px; font-family:'Orbitron';">GOLD CRATE REVEAL</h3>
+            <p style="font-size:0.75rem; color:#ccc;">Costs 1,000 coins. True randomized drops of 2,000, 5,000, or 15,000 tokens based on true mathematical luck allocation matrices!</p>
         </div>
     """, unsafe_allow_html=True)
     
-    if st.button("🔓 Open Premium Box (1,000 Coins)", key="box_trigger", use_container_width=True):
+    if st.button("🔓 Crack Premium Mystery Box (1,000 Coins)", key="execute_crate_reveal", use_container_width=True):
         if coins >= 1000:
             coins -= 1000
-            won = random.choice([2000, 5000, 15000])
-            coins += won
+            won_prize = random.choice([2000, 5000, 15000])
+            coins += won_prize
             db.execute("UPDATE users SET coins = ? WHERE id = ?", (coins, USER_ID))
             conn.commit()
-            st.balloons()
-            st.success(f"🎉 Crate unlocked successfully! You found 🪙 {won:,} Coins!")
+            st.balloons()  # Launch full gaming balloons drop
+            st.success(f"🎉 Crate opened successfully! True luck allocation: 🪙 +{won_prize:,} Coins added directly!")
+            st.write(f"### 🎰 Reward Matrix Added: +{won_prize:,} Tokens!")
             st.rerun()
         else:
-            st.error("❌ Not enough coins to crack this crate!")
+            st.error("❌ Insufficient tokens inside account node balance!")
 
-elif st.session_state.current_page == "📜 QUESTS":
-    st.markdown("### 📜 Daily Task Center")
+elif active_panel == "📜 QUESTS":
+    st.markdown("### 📜 Automated Daily Task Center")
     st.markdown("""
-        <div class="premium-item-card">
+        <div class="action-module-row-card">
             <div>
-                <div class="item-title">🎁 Daily Attendance Reward</div>
-                <div class="item-desc">Fixed daily check-in token credit grid</div>
+                <div class="module-card-headline">🎁 Daily Streak Check-In Verification</div>
+                <div style="font-size:0.7rem; color:#666;">Fixed attendance milestone ledger setups</div>
             </div>
-            <div class="item-cost" style="color:#4caf50;">+5,000</div>
+            <div class="module-card-cost-index" style="color:#4caf50;">+5,000</div>
         </div>
     """, unsafe_allow_html=True)
     
-    if last_claim == current_today:
-        st.warning("🔒 Already claimed today! Come back tomorrow.")
-        st.button("Claim Daily Reward (+5,000)", disabled=True, key="claim_dis")
+    if last_claim == current_date_stamp:
+        st.warning("🔒 Milestone Locked: Today's reward already claimed safely. Returns in next UTC block pattern.")
+        st.button("Claim Daily Reward (+5,000)", disabled=True, key="dis_daily")
     else:
-        if st.button("Claim Daily Reward (+5,000)", key="claim_act", use_container_width=True):
+        if st.button("Claim Daily Reward (+5,000)", key="act_daily", use_container_width=True):
             coins += 5000
-            db.execute("UPDATE users SET coins = ?, last_claim = ? WHERE id = ?", (coins, current_today, USER_ID))
+            db.execute("UPDATE users SET coins = ?, last_claim = ? WHERE id = ?", (coins, current_date_stamp, USER_ID))
             conn.commit()
-            st.toast("5,000 Streak Coins claimed!", icon="🎁")
+            st.toast("5,000 Milestone Tokens credited!", icon="🎁")
             st.rerun()
 
-elif st.session_state.current_page == "🏆 FRENZ":
-    st.markdown("### 🏆 Global Leaderboard")
+elif active_panel == "🏆 FRENZ":
+    st.markdown("### 🏆 Global Landlord Leaders Board")
     st.markdown(f"""
-        <div class="premium-item-card"><div><b>🥇 Tycoon_King</b></div><div class="item-cost">15,403,000</div></div>
-        <div class="premium-item-card"><div><b>🥈 FarmMaster_AI</b></div><div class="item-cost">12,110,500</div></div>
-        <div class="premium-item-card" style="border: 1px solid #ffd700; background:rgba(255,215,0,0.05);"><div><b>⭐ {USER_ID} (YOU)</b></div><div class="item-cost">{coins:,}</div></div>
+        <div class="action-module-row-card"><div><b>🥇 Tycoon_King</b></div><div class="module-card-cost-index">15,403,000</div></div>
+        <div class="action-module-row-card"><div><b>🥈 FarmMaster_AI</b></div><div class="module-card-cost-index">12,110,500</div></div>
+        <div class="action-module-row-card" style="border:1px solid #ffd700; background:rgba(255,215,0,0.04);"><div><b>⭐ {USER_ID} (YOU)</b></div><div class="module-card-cost-index">{coins:,}</div></div>
     """, unsafe_allow_html=True)
 
-elif st.session_state.current_page == "💎 DROP":
-    st.markdown("### 💎 Web3 Snapshot Distribution")
-    st.info("TON Wallet connection nodes deploy right after token distribution phase initialization.")
-    st.button("🔗 Bind TON Wallet Address (Soon)", disabled=True, use_container_width=True)
+elif active_panel == "💎 DROP":
+    st.markdown("### 💎 Web3 Snapshot Distribution Nodes")
+    st.info("TON Wallet connection configuration nodes script binds immediately right after token allocation snapshot initialization protocol completion.")
+    st.button("🔗 Bind TON Wallet Node Address (Locked)", disabled=True, use_container_width=True)
 
-# Padding space block for structural layout
-st.markdown("<br><br><br>", unsafe_allow_html=True)
+# --- LIVE ADVERTISEMENT NODE ZONE COMPONENT ---
+st.markdown("""
+    <div class="monetization-ad-banner">
+        <span style="font-size: 0.65rem; color: #ffd700; font-weight: bold; letter-spacing: 1px; display: block; margin-bottom: 2px;">SPONSORED PROMO AD ZONE</span>
+        <p style="font-size: 0.8rem; color: #888; margin: 0;">🌾 Upgrade Your Real-World Crop Yields with Village Mining AI Partners! 🌾</p>
+    </div>
+""", unsafe_allow_html=True)
+
+# Footer padding gap block
+st.markdown("<br><br>", unsafe_allow_html=True)
