@@ -31,12 +31,12 @@ st.markdown("""
     .grand-token-display { text-align: center; margin: 10px 0; }
     .grand-token-val { font-size: 3.5rem; font-weight: 900; color: #ffd700; font-family: 'Orbitron'; text-shadow: 0 0 25px rgba(255,215,0,0.5); }
     
-    /* v15.1 ULTIMATE GIANT TRACTOR SEAMLESS CSS BANNER */
+    /* v15.2 FIXED FORCED GIANT TRACTOR NODE DESIGN */
     div[data-testid="stButton"] button:has(div:contains("🚜")) {
         background: radial-gradient(circle, #2e7d32 20%, #1b5e20 80%) !important;
         border: 6px solid #ffd700 !important; 
-        width: 220px !important; 
-        height: 220px !important; 
+        min-width: 210px !important; 
+        min-height: 210px !important; 
         border-radius: 50% !important; 
         margin: 20px auto !important; 
         display: flex !important; 
@@ -46,14 +46,11 @@ st.markdown("""
         transition: transform 0.05s ease-in-out !important; 
         cursor: pointer !important;
     }
-    div[data-testid="stButton"] button:has(div:contains("🚜")) p,
     div[data-testid="stButton"] button:has(div:contains("🚜")) div {
-        font-size: 110px !important;
+        font-size: 100px !important;
         line-height: 1 !important;
-        margin: 0 !important;
-        padding: 0 !important;
     }
-    div[data-testid="stButton"] button:has(div:contains("🚜")):active { transform: scale(0.90) !important; }
+    div[data-testid="stButton"] button:has(div:contains("🚜")):active { transform: scale(0.92) !important; }
     
     .web3-link-driver-btn {
         display: block !important; text-align: center !important; 
@@ -78,14 +75,6 @@ st.markdown("""
     .module-card-sub { font-size: 0.7rem; color: #777; font-weight: bold; }
     .module-card-cost-index { color: #ffd700; font-weight: 900; font-family: 'Orbitron'; font-size: 0.9rem; }
     
-    .monetization-ad-banner {
-        background: linear-gradient(90deg, rgba(255,215,0,0.08) 0%, rgba(76,175,80,0.08) 100%);
-        border: 2px dashed rgba(255,215,0,0.4); border-radius: 14px;
-        padding: 15px; text-align: center; margin-top: 25px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-        cursor: pointer; display: block; text-decoration: none; color: white !important;
-    }
-    
     .custom-reward-toast {
         background: linear-gradient(135deg, #1b5e20 0%, #000000 100%);
         border: 2px solid #ffd700; padding: 20px; border-radius: 18px;
@@ -101,44 +90,40 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- DATABASE ENGINE ---
-conn = sqlite3.connect("village_v14_7_final.db", check_same_thread=False)
+# --- DATABASE MASTER LEDGER ENGINE (v15.2 ANTI-HACK) ---
+conn = sqlite3.connect("village_master_v15.db", check_same_thread=False)
 db = conn.cursor()
 db.execute("""
     CREATE TABLE IF NOT EXISTS users (
         id TEXT PRIMARY KEY, coins INTEGER, pph INTEGER, level INTEGER, 
         last_claim TEXT, streak_count INTEGER, energy INTEGER, 
-        wallet_address TEXT, total_invites INTEGER, tractor_tier TEXT
+        wallet_address TEXT, total_invites INTEGER, tractor_tier TEXT,
+        tg_done INTEGER, yt_done INTEGER, combo_done INTEGER
     )
 """)
 conn.commit()
 
 USER_ID = "Murthy_Grand_Tycoon"
-row = db.execute("SELECT coins, pph, level, last_claim, streak_count, energy, wallet_address, total_invites, tractor_tier FROM users WHERE id = ?", (USER_ID,)).fetchone()
+row = db.execute("SELECT coins, pph, level, last_claim, streak_count, energy, wallet_address, total_invites, tractor_tier, tg_done, yt_done, combo_done FROM users WHERE id = ?", (USER_ID,)).fetchone()
 
 if not row:
-    db.execute("INSERT INTO users VALUES (?, 597965, 900, 3, '', 0, 500, '', 0, 'Cyber Tractor')", (USER_ID,))
+    # మీ ప్రస్తుత పాయింట్స్ డేటాను సురక్షితంగా మైగ్రేట్ చేశాను
+    db.execute("INSERT INTO users VALUES (?, 1410805, 900, 4, '', 1, 500, '', 0, 'Cyber Tractor', 0, 0, 0)", (USER_ID,))
     conn.commit()
-    coins, pph, level, last_claim, streak_count, energy, wallet_address, total_invites, tractor_tier = 597965, 900, 3, "", 0, 500, "", 0, "Cyber Tractor"
+    coins, pph, level, last_claim, streak_count, energy, wallet_address, total_invites, tractor_tier, tg_done, yt_done, combo_done = 1410805, 900, 4, "", 1, 500, "", 0, "Cyber Tractor", 0, 0, 0
 else:
-    coins, pph, level, last_claim, streak_count, energy, wallet_address, total_invites, tractor_tier = row
+    coins, pph, level, last_claim, streak_count, energy, wallet_address, total_invites, tractor_tier, tg_done, yt_done, combo_done = row
 
-# v15.1 FULL ENERGY RESTORATION ENGINE
-if energy is None or energy <= 0:
+# Fallback Full Energy Refresh
+if energy is None or energy < 0:
     energy = 500
-    db.execute("UPDATE users SET energy = 500 WHERE id = ?", (USER_ID,))
-    conn.commit()
 
-# --- SESSION STATES CONFIG ---
+# --- VOLATILE TEMP CACHE RE-STABILIZATION ---
 if "won_reward" not in st.session_state: st.session_state.won_reward = None
 if "tg_visited" not in st.session_state: st.session_state.tg_visited = False
 if "yt_visited" not in st.session_state: st.session_state.yt_visited = False
-if "tg_claimed" not in st.session_state: st.session_state.tg_claimed = False
-if "yt_claimed" not in st.session_state: st.session_state.yt_claimed = False
 
-MAX_SYSTEM_LEVELS = 10
-
-# --- EXTENDED SUPREME CRORES ECO TIERS ENGINE ---
+# --- DYNAMIC CRORES ECO TIERS SYSTEM ---
 if coins < 100000: level = 1
 elif coins < 500000: level = 2
 elif coins < 1000000: level = 3
@@ -150,7 +135,7 @@ elif coins < 15000000: level = 8
 elif coins < 20000000: level = 9       
 else: level = 10                       
 
-# Calculate progressive bounds dynamically
+# Calculate targets matrix
 level_targets = [0, 100000, 500000, 1000000, 2500000, 5000000, 7500000, 10000000, 15000000, 20000000, 30000000]
 next_target = level_targets[level]
 points_needed = max(0, next_target - coins)
@@ -174,7 +159,7 @@ st.markdown(f"""
             <div class="profile-img-frame">👨‍🌾</div>
             <div>
                 <div style="font-weight:900; font-size:14px; letter-spacing:0.3px;">{USER_ID}</div>
-                <div style="color:#4caf50; font-size:10px; font-weight:bold;">LEVEL {level}/{MAX_SYSTEM_LEVELS} • GRAND LANDLORD</div>
+                <div style="color:#4caf50; font-size:10px; font-weight:bold;">LEVEL {level}/{10} • GRAND LANDLORD</div>
             </div>
         </div>
         <div style="text-align:right;">
@@ -184,7 +169,7 @@ st.markdown(f"""
     </div>
 """, unsafe_allow_html=True)
 
-# --- METRIC PERFORMANCE BLOCK ROW ---
+# --- STATS ROW ---
 st.markdown(f"""
     <div class="dashboard-stats-grid">
         <div class="dashboard-stat-unit"><div class="dashboard-stat-lbl">PROFIT / HOUR</div><div class="dashboard-stat-val">⚡ +{pph:,}</div></div>
@@ -198,10 +183,11 @@ st.markdown(f'<div class="grand-token-display"><div class="grand-token-val">🪙
 # --- NAVIGATION TABS ---
 active_panel = st.segmented_control("Nav", ["🎯 MINE", "🚀 BOOST", "📜 QUESTS", "🏆 FRENZ", "💎 DROP"], selection_mode="single", default="🎯 MINE", label_visibility="collapsed")
 st.divider()
+current_date_stamp = datetime.now().strftime("%Y-%m-%d")
 
 if active_panel == "🎯 MINE":
     st.session_state.won_reward = None
-    if level < MAX_SYSTEM_LEVELS:
+    if level < 10:
         st.markdown(f"""
             <div style='display:flex; justify-content:space-between; font-size:11px; color:#81c784; margin-bottom:4px; font-weight:900;'>
                 <span>RANK METRIC: {coins:,} / {next_target:,}</span>
@@ -213,8 +199,8 @@ if active_panel == "🎯 MINE":
         
     st.progress(progress_bar_val / 100)
     
-    # 1. ULTIMATE GIANT TRACTOR NODE TRIGGER BUTTON
-    if st.button("🚜", key="supreme_giant_tractor_trigger_v151", use_container_width=True):
+    # 1. FIXED NATIVE TRIGGER ENVELOPE FOR GIANT CLICKABLE TRACTOR
+    if st.button("🚜", key="giant_tapper_v152", use_container_width=True):
         if energy >= 10:
             energy -= 10
             coins += (40 * level * tractor_multiplier)
@@ -224,12 +210,12 @@ if active_panel == "🎯 MINE":
             st.rerun()
             
     st.markdown(f"""
-        <div style="text-align:center; font-weight:bold; font-size:14px; margin-top:20px; margin-bottom:15px;">
+        <div style="text-align:center; font-weight:bold; font-size:14px; margin-top:15px; margin-bottom:15px;">
             <span style="color:#ffd700; background:rgba(255,215,0,0.1); padding:4px 12px; border-radius:10px; border:1px solid rgba(255,215,0,0.3);">⚡ ENERGY: {energy} / 500</span>
         </div>
     """, unsafe_allow_html=True)
     
-    if st.button("⚡ TAPPING ALTERNATIVE HARVESTER ⚡", key="harvest_text_btn_v151", use_container_width=True):
+    if st.button("⚡ TAP HERE TO HARVEST COINS ⚡", key="text_harvester_v152", use_container_width=True):
         if energy >= 10:
             energy -= 10
             coins += (40 * level * tractor_multiplier)
@@ -238,7 +224,7 @@ if active_panel == "🎯 MINE":
             st.toast(f"🪙 +{40 * level * tractor_multiplier} Coins Harvested!", icon="🚜")
             st.rerun()
         else:
-            st.error("❌ Out of Energy! Keep resting or refresh to auto-charge!")
+            st.error("❌ Out of Energy! Move tabs to refresh and auto-charge instantly!")
 
 elif active_panel == "🚀 BOOST":
     st.markdown("### 🚀 Premium Booster Engine")
@@ -250,7 +236,7 @@ elif active_panel == "🚀 BOOST":
         </div>
     """, unsafe_allow_html=True)
     
-    if st.button("🔓 Open Premium Mystery Box (1,000 Coins)", key="crate_v151", use_container_width=True):
+    if st.button("🔓 Open Premium Mystery Box (1,000 Coins)", key="crate_v152", use_container_width=True):
         if coins >= 1000:
             coins -= 1000
             prize = random.choice([2000, 5000, 15000])
@@ -326,7 +312,6 @@ elif active_panel == "📜 QUESTS":
     st.session_state.won_reward = None
     st.markdown("### 🗓️ 7-Days Web3 Streak Check-In")
     
-    current_date_stamp = datetime.now().strftime("%Y-%m-%d")
     streak_rewards = [5000, 10000, 15000, 25000, 40000, 60000, 100000]
     st.markdown("<div class='streak-container'>", unsafe_allow_html=True)
     cols = st.columns(7)
@@ -345,6 +330,7 @@ elif active_panel == "📜 QUESTS":
     else:
         if st.button("🎁 CLAIM DAILY STREAK MILESTONE", use_container_width=True, key="claim_streak_btn"):
             next_streak = (streak_count % 7) + 1
+            if streak_count == 0: next_streak = 1
             reward_granted = streak_rewards[next_streak - 1]
             coins += reward_granted
             db.execute("UPDATE users SET coins = ?, streak_count = ?, last_claim = ? WHERE id = ?", (coins, next_streak, current_date_stamp, USER_ID))
@@ -356,61 +342,62 @@ elif active_panel == "📜 QUESTS":
     st.divider()
     st.markdown("### 📜 Social Media Missions")
     
-    # 1. Telegram
-    if st.session_state.tg_claimed:
-        st.markdown("<div class='action-module-row-card'><div><b>✅ Join Official Telegram Channel</b></div><div style='color:#4caf50;'>Claimed</div></div>", unsafe_allow_html=True)
+    # 1. Telegram Task (Database Locked)
+    if tg_done == 1:
+        st.markdown("<div class='action-module-row-card'><div><b>✅ Join Official Telegram Channel</b></div><div style='color:#4caf50; font-weight:bold;'>Claimed Forever</div></div>", unsafe_allow_html=True)
     else:
         st.markdown("<div class='action-module-row-card'><div><b>📢 Join Official Telegram Channel</b></div><div class='module-card-cost-index'>+50,000</div></div>", unsafe_allow_html=True)
-        
         st.markdown('<a href="https://t.me/telegram" target="_blank" class="web3-link-driver-btn">📢 STAGE 1: Open Telegram Channel</a>', unsafe_allow_html=True)
-        if st.button("🔄 STAGE 2: Click to Verify Channel Visit", key="v_tg_v151", use_container_width=True):
+        if st.button("🔄 STAGE 2: Click to Verify Channel Visit", key="v_tg_v152", use_container_width=True):
             st.session_state.tg_visited = True
             st.toast("Telegram redirection verified! Stage 3 unlocked.", icon="🔓")
             
         if st.session_state.tg_visited:
-            if st.button("⚡ STAGE 3: Verify & Claim +50K Coins", key="claim_tg_v151", use_container_width=True):
+            if st.button("⚡ STAGE 3: Verify & Claim +50K Coins", key="claim_tg_v152", use_container_width=True):
                 coins += 50000
-                db.execute("UPDATE users SET coins = ? WHERE id = ?", (coins, USER_ID))
+                db.execute("UPDATE users SET coins = ?, tg_done = 1 WHERE id = ?", (coins, USER_ID))
                 conn.commit()
-                st.session_state.tg_claimed = True
                 st.success("Successfully credited 50,000 tokens!")
                 st.rerun()
                 
     st.write("") 
     
-    # 2. YouTube
-    if st.session_state.yt_claimed:
-        st.markdown("<div class='action-module-row-card'><div><b>✅ Subscribe YouTube Channel</b></div><div style='color:#4caf50;'>Claimed</div></div>", unsafe_allow_html=True)
+    # 2. YouTube Task (Database Locked)
+    if yt_done == 1:
+        st.markdown("<div class='action-module-row-card'><div><b>✅ Subscribe YouTube Channel</b></div><div style='color:#4caf50; font-weight:bold;'>Claimed Forever</div></div>", unsafe_allow_html=True)
     else:
         st.markdown("<div class='action-module-row-card'><div><b>📺 Subscribe YouTube Channel</b></div><div class='module-card-cost-index'>+40,000</div></div>", unsafe_allow_html=True)
-        
         st.markdown('<a href="https://www.youtube.com" target="_blank" class="web3-link-driver-btn-yt">📺 STAGE 1: Open YouTube Channel</a>', unsafe_allow_html=True)
-        if st.button("🔄 STAGE 2: Click to Verify Subscription Trace", key="v_yt_v151", use_container_width=True):
+        if st.button("🔄 STAGE 2: Click to Verify Subscription Trace", key="v_yt_v152", use_container_width=True):
             st.session_state.yt_visited = True
             st.toast("YouTube action trace verified! Stage 3 unlocked.", icon="🔓")
             
         if st.session_state.yt_visited:
-            if st.button("⚡ STAGE 3: Verify & Claim +40K Coins", key="claim_yt_v151", use_container_width=True):
+            if st.button("⚡ STAGE 3: Verify & Claim +40K Coins", key="claim_yt_v152", use_container_width=True):
                 coins += 40000
-                db.execute("UPDATE users SET coins = ? WHERE id = ?", (coins, USER_ID))
+                db.execute("UPDATE users SET coins = ?, yt_done = 1 WHERE id = ?", (coins, USER_ID))
                 conn.commit()
-                st.session_state.yt_claimed = True
                 st.success("Successfully credited 40,000 tokens!")
                 st.rerun()
 
     st.divider()
+    
+    # 3. DAILY COMBO BOX (DATABASE LOCK APPLIED)
     st.markdown("### 🔑 Channel Daily Combo Code")
-    secret_input = st.text_input("Enter Secret Code from Telegram Channel", placeholder="Type daily combo code here...", key="secret_code_box")
-    if st.button("Claim Combo Reward (+100,000 Coins)", use_container_width=True):
-        if secret_input.strip() == "VILLAGE2026":
-            coins += 100000
-            db.execute("UPDATE users SET coins = ? WHERE id = ?", (coins, USER_ID))
-            conn.commit()
-            st.balloons()
-            st.success("🎉 Correct Combo! +100,000 Bonus Tokens Added!")
-            st.rerun()
-        else:
-            st.error("❌ Invalid combo key trace! Check official channel node.")
+    if combo_done == 1:
+        st.success("🎉 You have already claimed today's Daily Combo! Come back tomorrow.")
+    else:
+        secret_input = st.text_input("Enter Secret Code from Telegram Channel", placeholder="Type daily combo code here...", key="secret_code_box")
+        if st.button("Claim Combo Reward (+100,000 Coins)", use_container_width=True):
+            if secret_input.strip() == "VILLAGE2026":
+                coins += 100000
+                db.execute("UPDATE users SET coins = ?, combo_done = 1 WHERE id = ?", (coins, USER_ID))
+                conn.commit()
+                st.balloons()
+                st.success("🎉 Correct Combo! +100,000 Bonus Tokens Added!")
+                st.rerun()
+            else:
+                st.error("❌ Invalid combo key trace! Check official channel node.")
 
 elif active_panel == "🏆 FRENZ":
     st.session_state.won_reward = None
