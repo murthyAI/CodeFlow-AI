@@ -7,24 +7,24 @@ from datetime import datetime
 # --- APP CONFIG ---
 st.set_page_config(page_title="Village Mining AI", page_icon="🌾", layout="centered")
 
-# --- v15.7 ABSOLUTE FORCED SUPREME WALLPAPER & GIANT TAPPER CSS ---
+# --- v15.7.2 ABSOLUTE FORCED NANO-STYLE WALLPAPER & GIANT NODE CSS ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght=700;900&family=Urbanist:wght=600;800;900&display=swap');
     
-    /* 1. OVERRIDE ALL STREAMLIT LAYERS TO SHOW THE PREMIUM WALLPAPER */
+    /* 1. OVERRIDE ALL INDEPENDENT STREAMLIT BACKGROUNDS FOR HIGH-END WALLPAPER */
     html, body, [class*="st-"], [data-testid="stAppViewContainer"], [data-testid="stVerticalBlock"] { 
         font-family: 'Urbanist', sans-serif !important; 
         background: transparent !important;
         color: #ffffff !important; 
     }
     
-    /* HAMSTER / NANO-BANANA STYLE HIGH-END CYBER NEON BACKGROUND */
+    /* UNIVERSAL CYBER NEON AGRITECH SPACE WALLPAPER EFFECT */
     .stApp { 
         background: 
-            radial-gradient(circle at 50% 15%, rgba(76, 175, 80, 0.4) 0%, rgba(0,0,0,0) 65%),
-            radial-gradient(circle at 80% 80%, rgba(2, 136, 209, 0.2) 0%, rgba(0,0,0,0) 50%),
-            linear-gradient(180deg, #010c01 0%, #031403 40%, #000000 100%) !important;
+            radial-gradient(circle at 50% 15%, rgba(76, 175, 80, 0.45) 0%, rgba(0,0,0,0) 65%),
+            radial-gradient(circle at 80% 80%, rgba(2, 136, 209, 0.22) 0%, rgba(0,0,0,0) 50%),
+            linear-gradient(180deg, #010c01 0%, #031603 40%, #000000 100%) !important;
         background-attachment: fixed !important;
         background-color: #000000 !important;
     }
@@ -46,7 +46,7 @@ st.markdown("""
     .grand-token-display { text-align: center; margin: 10px 0; }
     .grand-token-val { font-size: 3.5rem; font-weight: 900; color: #ffd700; font-family: 'Orbitron'; text-shadow: 0 0 25px rgba(255,215,0,0.6); }
     
-    /* 2. v15.7 CONVERT STREAMLIT BUTTON INTO NATIVE GIANT CLICKABLE TRACTOR */
+    /* 2. v15.7.2 MASTER FORCED GIANT TRACTOR NODE TRIGGER BUTTON */
     div[data-testid="stButton"] button {
         transition: transform 0.05s ease-in-out !important;
     }
@@ -69,7 +69,7 @@ st.markdown("""
         display: flex !important; 
         justify-content: center !important; 
         align-items: center !important;
-        box-shadow: 0 0 50px rgba(76, 175, 80, 0.85), inset 0 0 25px rgba(0,0,0,0.9) !important;
+        box-shadow: 0 0 60px rgba(76, 175, 80, 0.9), inset 0 0 25px rgba(0,0,0,0.9) !important;
         cursor: pointer !important;
     }
     div[data-testid="stButton"] button:has(div:contains("🚜")) div {
@@ -134,9 +134,9 @@ USER_ID = "Murthy_Grand_Tycoon"
 row = db.execute("SELECT coins, pph, level, last_claim, streak_count, energy, wallet_address, total_invites, tractor_tier, tg_done, yt_done, combo_done, share_done FROM users WHERE id = ?", (USER_ID,)).fetchone()
 
 if not row:
-    db.execute("INSERT INTO users VALUES (?, 1637885, 900, 3, '', 1, 500, '', 0, 'Cyber Tractor', 0, 0, 0, 0)", (USER_ID,))
+    db.execute("INSERT INTO users VALUES (?, 1410805, 900, 3, '', 1, 500, '', 0, 'Cyber Tractor', 0, 0, 0, 0)", (USER_ID,))
     conn.commit()
-    coins, pph, level, last_claim, streak_count, energy, wallet_address, total_invites, tractor_tier, tg_done, yt_done, combo_done, share_done = 1637885, 900, 3, "", 1, 500, "", 0, "Cyber Tractor", 0, 0, 0, 0
+    coins, pph, level, last_claim, streak_count, energy, wallet_address, total_invites, tractor_tier, tg_done, yt_done, combo_done, share_done = 1410805, 900, 3, "", 1, 500, "", 0, "Cyber Tractor", 0, 0, 0, 0
 else:
     coins, pph, level, last_claim, streak_count, energy, wallet_address, total_invites, tractor_tier, tg_done, yt_done, combo_done, share_done = row
 
@@ -149,7 +149,7 @@ if "won_reward" not in st.session_state: st.session_state.won_reward = None
 if "tg_visited" not in st.session_state: st.session_state.tg_visited = False
 if "yt_visited" not in st.session_state: st.session_state.yt_visited = False
 
-# --- v15.7 SHATHAKOTLA (5 BILLIONS) EXTENDED SUPREME ECONOMY ---
+# --- v15.7.2 SHATHAKOTLA (5 BILLIONS) EXTENDED SUPREME ECONOMY ---
 if coins < 100000: level = 1
 elif coins < 1000000: level = 2
 elif coins < 5000000: level = 3
@@ -223,9 +223,9 @@ if active_panel == "🎯 MINE":
         
     st.progress(progress_bar_val / 100)
     
-    # --- v15.7 THE REAL NATIVE CLICKABLE SUPREME TRACTOR BUTTON ---
-    # పాత నార్మల్ టెక్స్ట్ బటన్ పూర్తిగా డిలీట్! ఈ పెద్ద ట్రాక్టర్ బొమ్మే ఇప్పుడు లైవ్ యాక్టివ్ క్లిక్ బటన్!
-    if st.button("🚜", key="supreme_native_tractor_clicker_v157", use_container_width=True):
+    # --- v15.7.2 THE REAL NATIVE GIANT TRACTOR SEAMLESS CLICKER ---
+    # మూర్తి గారు, మీ ఇన్స్ట్రక్షన్ ప్రకారం ఈ ట్రాక్టర్ బొమ్మే మెయిన్ ట్యాపర్ అండ్ దీని కిందే మీ గైడ్ లైన్ టెక్స్ట్ లాక్ చేశాను.
+    if st.button("🚜", key="supreme_native_tractor_clicker_v1572", use_container_width=True):
         if energy >= 10:
             energy -= 10
             coins += (40 * level * tractor_multiplier)
@@ -234,9 +234,13 @@ if active_panel == "🎯 MINE":
             st.toast(f"🪙 +{40 * level * tractor_multiplier} Coins Harvested!", icon="🚜")
             st.rerun()
             
+    # మూర్తి గారు, యూజర్ గైడెన్స్ కోసం మీరు అడిగిన కరెక్ట్ టెక్స్ట్ లైన్ ఇక్కడే ఉంది
     st.markdown(f"""
-        <div style="text-align:center; font-weight:bold; font-size:14px; margin-top:15px; margin-bottom:15px;">
-            <span style="color:#ffd700; background:rgba(76,175,80,0.15); padding:5px 15px; border-radius:12px; border:1px solid rgba(76,175,80,0.4);">⚡ ENERGY: {energy} / 500</span>
+        <div style="text-align:center; font-weight:800; font-size:13px; color:#ffd700; letter-spacing:0.5px; text-transform:uppercase; margin-top:-5px; margin-bottom:15px;">
+            ✨ TAP TRACTOR TO GET COINS ✨
+        </div>
+        <div style="text-align:center; font-weight:bold; font-size:14px; margin-bottom:15px;">
+            <span style="color:#ffffff; background:rgba(76,175,80,0.18); padding:5px 15px; border-radius:12px; border:1px solid rgba(76,175,80,0.45);">⚡ ENERGY: {energy} / 500</span>
         </div>
     """, unsafe_allow_html=True)
 
@@ -250,7 +254,7 @@ elif active_panel == "🚀 BOOST":
         </div>
     """, unsafe_allow_html=True)
     
-    if st.button("🔓 Open Premium Mystery Box (1,000 Coins)", key="crate_v157", use_container_width=True):
+    if st.button("🔓 Open Premium Mystery Box (1,000 Coins)", key="crate_v1572", use_container_width=True):
         if coins >= 1000:
             coins -= 1000
             prize = random.choice([2000, 5000, 15000])
@@ -363,12 +367,12 @@ elif active_panel == "📜 QUESTS":
     else:
         st.markdown("<div class='action-module-row-card'><div><b>📢 Join Official Telegram Channel</b></div><div class='module-card-cost-index'>+50,000</div></div>", unsafe_allow_html=True)
         st.markdown('<a href="https://t.me/telegram" target="_blank" class="web3-link-driver-btn">📢 STAGE 1: Open Telegram Channel</a>', unsafe_allow_html=True)
-        if st.button("🔄 STAGE 2: Click to Verify Channel Visit", key="v_tg_v157", use_container_width=True):
+        if st.button("🔄 STAGE 2: Click to Verify Channel Visit", key="v_tg_v1572", use_container_width=True):
             st.session_state.tg_visited = True
             st.toast("Telegram redirection verified! Stage 3 unlocked.", icon="🔓")
             
         if st.session_state.tg_visited:
-            if st.button("⚡ STAGE 3: Verify & Claim +50K Coins", key="claim_tg_v157", use_container_width=True):
+            if st.button("⚡ STAGE 3: Verify & Claim +50K Coins", key="claim_tg_v1572", use_container_width=True):
                 coins += 50000
                 db.execute("UPDATE users SET coins = ?, tg_done = 1 WHERE id = ?", (coins, USER_ID))
                 conn.commit()
@@ -383,12 +387,12 @@ elif active_panel == "📜 QUESTS":
     else:
         st.markdown("<div class='action-module-row-card'><div><b>📺 Subscribe YouTube Channel</b></div><div class='module-card-cost-index'>+40,000</div></div>", unsafe_allow_html=True)
         st.markdown('<a href="https://www.youtube.com" target="_blank" class="web3-link-driver-btn-yt">📺 STAGE 1: Open YouTube Channel</a>', unsafe_allow_html=True)
-        if st.button("🔄 STAGE 2: Click to Verify Subscription Trace", key="v_yt_v157", use_container_width=True):
+        if st.button("🔄 STAGE 2: Click to Verify Subscription Trace", key="v_yt_v1572", use_container_width=True):
             st.session_state.yt_visited = True
             st.toast("YouTube action trace verified! Stage 3 unlocked.", icon="🔓")
             
         if st.session_state.yt_visited:
-            if st.button("⚡ STAGE 3: Verify & Claim +40K Coins", key="claim_yt_v157", use_container_width=True):
+            if st.button("⚡ STAGE 3: Verify & Claim +40K Coins", key="claim_yt_v1572", use_container_width=True):
                 coins += 40000
                 db.execute("UPDATE users SET coins = ?, yt_done = 1 WHERE id = ?", (coins, USER_ID))
                 conn.commit()
