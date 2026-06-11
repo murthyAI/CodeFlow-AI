@@ -7,30 +7,32 @@ from datetime import datetime
 # --- APP CONFIG ---
 st.set_page_config(page_title="Village Mining AI", page_icon="🌾", layout="centered")
 
-# --- v15.6 FORCED NATIVE WEB3 MAINFRAME WALLPAPER & UI CSS ---
+# --- v15.7 ABSOLUTE FORCED SUPREME WALLPAPER & GIANT TAPPER CSS ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght=700;900&family=Urbanist:wght=600;800;900&display=swap');
     
-    /* FORCED NATIVE BACKGROUND ENFORCEMENT */
-    html, body, [class*="st-"] { 
+    /* 1. OVERRIDE ALL STREAMLIT LAYERS TO SHOW THE PREMIUM WALLPAPER */
+    html, body, [class*="st-"], [data-testid="stAppViewContainer"], [data-testid="stVerticalBlock"] { 
         font-family: 'Urbanist', sans-serif !important; 
-        background-color: #000000 !important; 
+        background: transparent !important;
         color: #ffffff !important; 
     }
     
+    /* HAMSTER / NANO-BANANA STYLE HIGH-END CYBER NEON BACKGROUND */
     .stApp { 
         background: 
-            radial-gradient(circle at 50% 20%, rgba(76, 175, 80, 0.4) 0%, rgba(0,0,0,0) 60%),
+            radial-gradient(circle at 50% 15%, rgba(76, 175, 80, 0.4) 0%, rgba(0,0,0,0) 65%),
             radial-gradient(circle at 80% 80%, rgba(2, 136, 209, 0.2) 0%, rgba(0,0,0,0) 50%),
-            linear-gradient(180deg, #010d01 0%, #031403 35%, #000000 100%) !important;
+            linear-gradient(180deg, #010c01 0%, #031403 40%, #000000 100%) !important;
         background-attachment: fixed !important;
+        background-color: #000000 !important;
     }
     
     [data-testid="stHeader"], [data-testid="stToolbar"] { display: none !important; }
     
     .premium-header-card {
-        background: linear-gradient(135deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.01) 100%);
+        background: linear-gradient(135deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.01) 100%) !important;
         border-radius: 22px; padding: 12px 16px; border: 1px solid rgba(76, 175, 80, 0.45);
         display: flex; align-items: center; justify-content: space-between;
         box-shadow: 0 10px 30px rgba(0,0,0,0.7); margin-bottom: 15px;
@@ -38,13 +40,45 @@ st.markdown("""
     }
     .profile-img-frame { width: 42px; height: 42px; border-radius: 50%; border: 2px solid #ffd700; background: #111; text-align: center; line-height: 38px; font-size: 20px; }
     .dashboard-stats-grid { display: flex; gap: 8px; margin-bottom: 15px; }
-    .dashboard-stat-unit { background: rgba(10,25,10,0.85); border: 1px solid rgba(76, 175, 80, 0.25); border-radius: 14px; padding: 10px; flex: 1; text-align: center; backdrop-filter: blur(5px); }
+    .dashboard-stat-unit { background: rgba(10,25,10,0.85) !important; border: 1px solid rgba(76, 175, 80, 0.25); border-radius: 14px; padding: 10px; flex: 1; text-align: center; backdrop-filter: blur(5px); }
     .dashboard-stat-val { font-size: 0.9rem; font-weight: 900; color: #ffd700; font-family: 'Orbitron'; }
     .dashboard-stat-lbl { font-size: 0.55rem; color: #bbb; font-weight: bold; }
     .grand-token-display { text-align: center; margin: 10px 0; }
     .grand-token-val { font-size: 3.5rem; font-weight: 900; color: #ffd700; font-family: 'Orbitron'; text-shadow: 0 0 25px rgba(255,215,0,0.6); }
     
-    /* NATIVE HTML LINK STYLING */
+    /* 2. v15.7 CONVERT STREAMLIT BUTTON INTO NATIVE GIANT CLICKABLE TRACTOR */
+    div[data-testid="stButton"] button {
+        transition: transform 0.05s ease-in-out !important;
+    }
+    div[data-testid="stButton"]:has(button:contains("🚜")) {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+    }
+    div[data-testid="stButton"] button:has(div:contains("🚜")) {
+        background: radial-gradient(circle, #388e3c 15%, #1b5e20 85%) !important;
+        border: 6px solid #ffd700 !important; 
+        width: 240px !important; 
+        height: 240px !important; 
+        min-width: 240px !important;
+        min-height: 240px !important;
+        max-width: 240px !important;
+        max-height: 240px !important;
+        border-radius: 50% !important; 
+        margin: 20px auto !important; 
+        display: flex !important; 
+        justify-content: center !important; 
+        align-items: center !important;
+        box-shadow: 0 0 50px rgba(76, 175, 80, 0.85), inset 0 0 25px rgba(0,0,0,0.9) !important;
+        cursor: pointer !important;
+    }
+    div[data-testid="stButton"] button:has(div:contains("🚜")) div {
+        font-size: 110px !important;
+        line-height: 1 !important;
+        display: block !important;
+    }
+    div[data-testid="stButton"] button:has(div:contains("🚜")):active { transform: scale(0.92) !important; }
+    
     .web3-link-driver-btn {
         display: block !important; text-align: center !important; 
         background: linear-gradient(90deg, #0288d1 0%, #0056b3 100%) !important;
@@ -61,37 +95,29 @@ st.markdown("""
     }
     
     .action-module-row-card {
-        background: rgba(15,15,15,0.93); border: 1px solid #222; border-radius: 16px; padding: 15px;
+        background: rgba(15,15,15,0.93) !important; border: 1px solid #222; border-radius: 16px; padding: 15px;
         display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
     }
     .module-card-headline { font-weight: 800; font-size: 0.95rem; color: #fff; }
     .module-card-sub { font-size: 0.7rem; color: #888; font-weight: bold; }
     .module-card-cost-index { color: #ffd700; font-weight: 900; font-family: 'Orbitron'; font-size: 0.9rem; }
     
-    .monetization-ad-banner {
-        background: linear-gradient(90deg, rgba(255,215,0,0.08) 0%, rgba(76,175,80,0.08) 100%);
-        border: 2px dashed rgba(255,215,0,0.4); border-radius: 14px;
-        padding: 15px; text-align: center; margin-top: 25px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-        cursor: pointer; display: block; text-decoration: none; color: white !important;
-    }
-    
     .custom-reward-toast {
-        background: linear-gradient(135deg, #1b5e20 0%, #000000 100%);
+        background: linear-gradient(135deg, #1b5e20 0%, #000000 100%) !important;
         border: 2px solid #ffd700; padding: 20px; border-radius: 18px;
         text-align: center; box-shadow: 0 0 40px rgba(255,215,0,0.5);
         margin-top: 20px;
     }
     
     .streak-container { display: flex; gap: 6px; justify-content: space-between; margin-bottom: 15px; }
-    .streak-day-box { background: #111; border: 1px solid #222; border-radius: 10px; padding: 8px 4px; text-align: center; flex: 1; }
-    .streak-day-box.active { border-color: #ffd700; background: rgba(255,215,0,0.07); }
+    .streak-day-box { background: #111 !important; border: 1px solid #222; border-radius: 10px; padding: 8px 4px; text-align: center; flex: 1; }
+    .streak-day-box.active { border-color: #ffd700 !important; background: rgba(255,215,0,0.07) !important; }
     .streak-day-title { font-size: 10px; color: #aaa; font-weight: bold; }
     .streak-day-reward { font-size: 11px; color: #ffd700; font-family: 'Orbitron'; font-weight: 900; margin-top: 4px; }
     </style>
 """, unsafe_allow_html=True)
 
-# --- DATABASE ENGINE ---
+# --- DATABASE MASTER ENGINE ---
 conn = sqlite3.connect("village_master_v15.db", check_same_thread=False)
 db = conn.cursor()
 db.execute("""
@@ -104,33 +130,26 @@ db.execute("""
 """)
 conn.commit()
 
-# Share done safety ledger column check
-try:
-    db.execute("ALTER TABLE users ADD COLUMN share_done INTEGER DEFAULT 0")
-    conn.commit()
-except:
-    pass
-
 USER_ID = "Murthy_Grand_Tycoon"
 row = db.execute("SELECT coins, pph, level, last_claim, streak_count, energy, wallet_address, total_invites, tractor_tier, tg_done, yt_done, combo_done, share_done FROM users WHERE id = ?", (USER_ID,)).fetchone()
 
 if not row:
-    db.execute("INSERT INTO users VALUES (?, 1635965, 900, 3, '', 1, 500, '', 0, 'Cyber Tractor', 0, 0, 0, 0)", (USER_ID,))
+    db.execute("INSERT INTO users VALUES (?, 1637885, 900, 3, '', 1, 500, '', 0, 'Cyber Tractor', 0, 0, 0, 0)", (USER_ID,))
     conn.commit()
-    coins, pph, level, last_claim, streak_count, energy, wallet_address, total_invites, tractor_tier, tg_done, yt_done, combo_done, share_done = 1635965, 900, 3, "", 1, 500, "", 0, "Cyber Tractor", 0, 0, 0, 0
+    coins, pph, level, last_claim, streak_count, energy, wallet_address, total_invites, tractor_tier, tg_done, yt_done, combo_done, share_done = 1637885, 900, 3, "", 1, 500, "", 0, "Cyber Tractor", 0, 0, 0, 0
 else:
     coins, pph, level, last_claim, streak_count, energy, wallet_address, total_invites, tractor_tier, tg_done, yt_done, combo_done, share_done = row
 
-# Full Energy Module Restored
+# Full Energy Module Backup
 if energy is None or energy < 0:
     energy = 500
 
-# Cache triggers
+# Cache managers
 if "won_reward" not in st.session_state: st.session_state.won_reward = None
 if "tg_visited" not in st.session_state: st.session_state.tg_visited = False
 if "yt_visited" not in st.session_state: st.session_state.yt_visited = False
 
-# --- v15.6 BILLIONS SUPREME ECONOMY LAWS ---
+# --- v15.7 SHATHAKOTLA (5 BILLIONS) EXTENDED SUPREME ECONOMY ---
 if coins < 100000: level = 1
 elif coins < 1000000: level = 2
 elif coins < 5000000: level = 3
@@ -153,7 +172,7 @@ tractor_multiplier = 1
 if tractor_tier == "Iron Tractor": tractor_multiplier = 2
 elif tractor_tier == "Cyber Tractor": tractor_multiplier = 4
 
-# --- AIRDROP FIXED TO NOVEMBER 10, 2026 (5 MONTHS COUNTDOWN) ---
+# --- AIRDROP COUNTDOWN LOCKED TO NOVEMBER 10, 2026 ---
 launch_target_date = datetime(2026, 11, 10)  
 current_time_now = datetime.now()
 days_remaining = max(0, (launch_target_date - current_time_now).days)
@@ -175,7 +194,7 @@ st.markdown(f"""
     </div>
 """, unsafe_allow_html=True)
 
-# --- STATS BLOCK ROW ---
+# --- STATS ROW ---
 st.markdown(f"""
     <div class="dashboard-stats-grid">
         <div class="dashboard-stat-unit"><div class="dashboard-stat-lbl">PROFIT / HOUR</div><div class="dashboard-stat-val">⚡ +{pph:,}</div></div>
@@ -186,7 +205,7 @@ st.markdown(f"""
 
 st.markdown(f'<div class="grand-token-display"><div class="grand-token-val">🪙 {coins:,}</div></div>', unsafe_allow_html=True)
 
-# --- NAVIGATION CONTROLLER ---
+# --- NAVIGATION TABS ---
 active_panel = st.segmented_control("Nav", ["🎯 MINE", "🚀 BOOST", "📜 QUESTS", "🏆 FRENZ", "💎 DROP"], selection_mode="single", default="🎯 MINE", label_visibility="collapsed")
 st.divider()
 
@@ -204,42 +223,9 @@ if active_panel == "🎯 MINE":
         
     st.progress(progress_bar_val / 100)
     
-    # --- v15.6 BYPASS COMPONENT NATIVE HTML GIANT TAP MATRIX ---
-    # మొబైల్ సిస్టమ్ బటన్ కన్స్ట్రైంట్స్ ని బ్రేక్ చేస్తూ డిజైన్ చేసిన ప్యూర్ నియాన్ కాయిన్ ఎలిమెంట్
-    st.markdown("""
-        <div style="display: flex; justify-content: center; align-items: center; margin: 30px auto;">
-            <div style="
-                background: radial-gradient(circle, #388e3c 15%, #1b5e20 85%);
-                border: 6px solid #ffd700;
-                width: 220px;
-                height: 220px;
-                border-radius: 50%;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                box-shadow: 0 0 50px rgba(76, 175, 80, 0.8), inset 0 0 25px rgba(0,0,0,0.9);
-                font-size: 95px;
-                user-select: none;
-                animation: pulse 2s infinite ease-in-out;
-            ">🚜</div>
-        </div>
-        <style>
-        @keyframes pulse {
-            0% { transform: scale(1); box-shadow: 0 0 40px rgba(76, 175, 80, 0.7); }
-            50% { transform: scale(1.03); box-shadow: 0 0 60px rgba(76, 175, 80, 0.9); }
-            100% { transform: scale(1); box-shadow: 0 0 40px rgba(76, 175, 80, 0.7); }
-        }
-        </style>
-    """, unsafe_allow_html=True)
-    
-    st.markdown(f"""
-        <div style="text-align:center; font-weight:bold; font-size:14px; margin-top:10px; margin-bottom:15px;">
-            <span style="color:#ffd700; background:rgba(76,175,80,0.15); padding:5px 15px; border-radius:12px; border:1px solid rgba(76,175,80,0.4);">⚡ ENERGY: {energy} / 500</span>
-        </div>
-    """, unsafe_allow_html=True)
-    
-    # ఈ హార్వెస్టర్ బటన్ సిస్టమ్ క్లిక్స్ ని పక్కాగా రికార్డ్ చేస్తుంది
-    if st.button("⚡ CLICK HERE TO TAP TRACTOR COIN ⚡", key="mainframe_harvester_v156", use_container_width=True):
+    # --- v15.7 THE REAL NATIVE CLICKABLE SUPREME TRACTOR BUTTON ---
+    # పాత నార్మల్ టెక్స్ట్ బటన్ పూర్తిగా డిలీట్! ఈ పెద్ద ట్రాక్టర్ బొమ్మే ఇప్పుడు లైవ్ యాక్టివ్ క్లిక్ బటన్!
+    if st.button("🚜", key="supreme_native_tractor_clicker_v157", use_container_width=True):
         if energy >= 10:
             energy -= 10
             coins += (40 * level * tractor_multiplier)
@@ -247,20 +233,24 @@ if active_panel == "🎯 MINE":
             conn.commit()
             st.toast(f"🪙 +{40 * level * tractor_multiplier} Coins Harvested!", icon="🚜")
             st.rerun()
-        else:
-            st.error("❌ Out of Energy! Move tabs to refresh and auto-charge instantly!")
+            
+    st.markdown(f"""
+        <div style="text-align:center; font-weight:bold; font-size:14px; margin-top:15px; margin-bottom:15px;">
+            <span style="color:#ffd700; background:rgba(76,175,80,0.15); padding:5px 15px; border-radius:12px; border:1px solid rgba(76,175,80,0.4);">⚡ ENERGY: {energy} / 500</span>
+        </div>
+    """, unsafe_allow_html=True)
 
 elif active_panel == "🚀 BOOST":
     st.markdown("### 🚀 Premium Booster Engine")
     st.markdown("""
-        <div style="background: linear-gradient(135deg, rgba(255,215,0,0.12) 0%, rgba(0,0,0,0.7) 100%); border: 2px dashed #ffd700; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 20px;">
+        <div style="background: linear-gradient(135deg, rgba(255,215,0,0.12) 0%, rgba(0,0,0,0.7) 100%) !important; border: 2px dashed #ffd700; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 20px;">
             <h2 style="margin:0; font-size:45px;">🎁</h2>
             <h4 style="color:#ffd700; margin:5px 0; font-family:'Orbitron';">GOLD CRATE REVEAL</h4>
             <p style="font-size:0.7rem; color:#ccc; margin:0;">Costs 1,000 coins. Drop matrix luck chance: 2K, 5K, or 15K coins instantly!</p>
         </div>
     """, unsafe_allow_html=True)
     
-    if st.button("🔓 Open Premium Mystery Box (1,000 Coins)", key="crate_v156", use_container_width=True):
+    if st.button("🔓 Open Premium Mystery Box (1,000 Coins)", key="crate_v157", use_container_width=True):
         if coins >= 1000:
             coins -= 1000
             prize = random.choice([2000, 5000, 15000])
@@ -373,12 +363,12 @@ elif active_panel == "📜 QUESTS":
     else:
         st.markdown("<div class='action-module-row-card'><div><b>📢 Join Official Telegram Channel</b></div><div class='module-card-cost-index'>+50,000</div></div>", unsafe_allow_html=True)
         st.markdown('<a href="https://t.me/telegram" target="_blank" class="web3-link-driver-btn">📢 STAGE 1: Open Telegram Channel</a>', unsafe_allow_html=True)
-        if st.button("🔄 STAGE 2: Click to Verify Channel Visit", key="v_tg_v156", use_container_width=True):
+        if st.button("🔄 STAGE 2: Click to Verify Channel Visit", key="v_tg_v157", use_container_width=True):
             st.session_state.tg_visited = True
             st.toast("Telegram redirection verified! Stage 3 unlocked.", icon="🔓")
             
         if st.session_state.tg_visited:
-            if st.button("⚡ STAGE 3: Verify & Claim +50K Coins", key="claim_tg_v156", use_container_width=True):
+            if st.button("⚡ STAGE 3: Verify & Claim +50K Coins", key="claim_tg_v157", use_container_width=True):
                 coins += 50000
                 db.execute("UPDATE users SET coins = ?, tg_done = 1 WHERE id = ?", (coins, USER_ID))
                 conn.commit()
@@ -393,12 +383,12 @@ elif active_panel == "📜 QUESTS":
     else:
         st.markdown("<div class='action-module-row-card'><div><b>📺 Subscribe YouTube Channel</b></div><div class='module-card-cost-index'>+40,000</div></div>", unsafe_allow_html=True)
         st.markdown('<a href="https://www.youtube.com" target="_blank" class="web3-link-driver-btn-yt">📺 STAGE 1: Open YouTube Channel</a>', unsafe_allow_html=True)
-        if st.button("🔄 STAGE 2: Click to Verify Subscription Trace", key="v_yt_v156", use_container_width=True):
+        if st.button("🔄 STAGE 2: Click to Verify Subscription Trace", key="v_yt_v157", use_container_width=True):
             st.session_state.yt_visited = True
             st.toast("YouTube action trace verified! Stage 3 unlocked.", icon="🔓")
             
         if st.session_state.yt_visited:
-            if st.button("⚡ STAGE 3: Verify & Claim +40K Coins", key="claim_yt_v156", use_container_width=True):
+            if st.button("⚡ STAGE 3: Verify & Claim +40K Coins", key="claim_yt_v157", use_container_width=True):
                 coins += 40000
                 db.execute("UPDATE users SET coins = ?, yt_done = 1 WHERE id = ?", (coins, USER_ID))
                 conn.commit()
@@ -429,7 +419,7 @@ elif active_panel == "🏆 FRENZ":
     st.markdown("### 👥 Web3 Referral Program")
     
     st.markdown(f"""
-        <div style="background:rgba(255,255,255,0.02); border:1px solid #222; border-radius:14px; padding:15px; text-align:center; margin-bottom:15px;">
+        <div style="background:rgba(255,255,255,0.02) !important; border:1px solid #222; border-radius:14px; padding:15px; text-align:center; margin-bottom:15px;">
             <span style="font-size:12px; color:#aaa; font-weight:bold;">TOTAL INVITED FRIENDS</span>
             <h1 style="margin:0; font-family:'Orbitron'; color:#4caf50; font-size:32px;">{total_invites} FRENZ</h1>
             <p style="font-size:11px; color:#ccc; margin:4px 0 0 0;">Earn +25,000 Coins for every successful network invite verified.</p>
@@ -465,7 +455,7 @@ elif active_panel == "💎 DROP":
     
     if wallet_address and wallet_address.strip() != "":
         st.markdown(f"""
-            <div style="background: linear-gradient(135deg, rgba(76,175,80,0.12) 0%, rgba(0,0,0,0.8) 100%); border: 2px solid #4caf50; border-radius: 20px; padding: 25px; text-align: center; box-shadow: 0 0 25px rgba(76,175,80,0.25);">
+            <div style="background: linear-gradient(135deg, rgba(76,175,80,0.12) 0%, rgba(0,0,0,0.8) 100%) !important; border: 2px solid #4caf50; border-radius: 20px; padding: 25px; text-align: center; box-shadow: 0 0 25px rgba(76,175,80,0.25);">
                 <h1 style="margin:0; font-size:45px;">💎</h1>
                 <h3 style="color:#4caf50; margin-top:5px; font-family:'Orbitron'; font-weight:900;">WALLET LINKED SECURELY</h3>
                 <code style="background:#222; padding:6px 12px; border-radius:6px; color:#ffd700; display:inline-block; margin:10px 0; font-size:10px; border:1px solid #333;">{wallet_address}</code>
