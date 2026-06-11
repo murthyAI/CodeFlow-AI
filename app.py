@@ -31,27 +31,29 @@ st.markdown("""
     .grand-token-display { text-align: center; margin: 10px 0; }
     .grand-token-val { font-size: 3.5rem; font-weight: 900; color: #ffd700; font-family: 'Orbitron'; text-shadow: 0 0 25px rgba(255,215,0,0.5); }
     
-    /* v15.0 SUPREME GIANT CLICKABLE TRACTOR TRIGGER NODE */
+    /* v15.1 ULTIMATE GIANT TRACTOR SEAMLESS CSS BANNER */
     div[data-testid="stButton"] button:has(div:contains("🚜")) {
-        background: radial-gradient(circle, #2e7d32 10%, #1b5e20 80%) !important;
+        background: radial-gradient(circle, #2e7d32 20%, #1b5e20 80%) !important;
         border: 6px solid #ffd700 !important; 
-        width: 180px !important; 
-        height: 180px !important; 
+        width: 220px !important; 
+        height: 220px !important; 
         border-radius: 50% !important; 
-        margin: 15px auto !important; 
+        margin: 20px auto !important; 
         display: flex !important; 
         justify-content: center !important; 
         align-items: center !important;
-        box-shadow: 0 0 45px rgba(76, 175, 80, 0.7), inset 0 0 20px rgba(0,0,0,0.8) !important;
-        transition: transform 0.1s ease !important; 
+        box-shadow: 0 0 50px rgba(76, 175, 80, 0.8), inset 0 0 25px rgba(0,0,0,0.9) !important;
+        transition: transform 0.05s ease-in-out !important; 
         cursor: pointer !important;
     }
+    div[data-testid="stButton"] button:has(div:contains("🚜")) p,
     div[data-testid="stButton"] button:has(div:contains("🚜")) div {
-        font-size: 85px !important;
+        font-size: 110px !important;
+        line-height: 1 !important;
         margin: 0 !important;
         padding: 0 !important;
     }
-    div[data-testid="stButton"] button:has(div:contains("🚜")):active { transform: scale(0.92) !important; }
+    div[data-testid="stButton"] button:has(div:contains("🚜")):active { transform: scale(0.90) !important; }
     
     .web3-link-driver-btn {
         display: block !important; text-align: center !important; 
@@ -121,9 +123,11 @@ if not row:
 else:
     coins, pph, level, last_claim, streak_count, energy, wallet_address, total_invites, tractor_tier = row
 
-# Fallback Energy automatic recharge module
-if energy is None or energy < 0:
+# v15.1 FULL ENERGY RESTORATION ENGINE
+if energy is None or energy <= 0:
     energy = 500
+    db.execute("UPDATE users SET energy = 500 WHERE id = ?", (USER_ID,))
+    conn.commit()
 
 # --- SESSION STATES CONFIG ---
 if "won_reward" not in st.session_state: st.session_state.won_reward = None
@@ -132,7 +136,6 @@ if "yt_visited" not in st.session_state: st.session_state.yt_visited = False
 if "tg_claimed" not in st.session_state: st.session_state.tg_claimed = False
 if "yt_claimed" not in st.session_state: st.session_state.yt_claimed = False
 
-# --- CONFIG CONSTANTS ---
 MAX_SYSTEM_LEVELS = 10
 
 # --- EXTENDED SUPREME CRORES ECO TIERS ENGINE ---
@@ -210,8 +213,8 @@ if active_panel == "🎯 MINE":
         
     st.progress(progress_bar_val / 100)
     
-    # 1. FIXED GIANT PREMIUM CLICKABLE TRACTOR BUTTON
-    if st.button("🚜", key="supreme_giant_tractor_trigger", use_container_width=True):
+    # 1. ULTIMATE GIANT TRACTOR NODE TRIGGER BUTTON
+    if st.button("🚜", key="supreme_giant_tractor_trigger_v151", use_container_width=True):
         if energy >= 10:
             energy -= 10
             coins += (40 * level * tractor_multiplier)
@@ -221,12 +224,12 @@ if active_panel == "🎯 MINE":
             st.rerun()
             
     st.markdown(f"""
-        <div style="text-align:center; font-weight:bold; font-size:13px; margin-top:15px; margin-bottom:15px;">
-            <span style="color:#ffd700;">⚡ ENERGY: {energy} / 500</span> | <span style="color:#777;">Skin: {tractor_tier}</span>
+        <div style="text-align:center; font-weight:bold; font-size:14px; margin-top:20px; margin-bottom:15px;">
+            <span style="color:#ffd700; background:rgba(255,215,0,0.1); padding:4px 12px; border-radius:10px; border:1px solid rgba(255,215,0,0.3);">⚡ ENERGY: {energy} / 500</span>
         </div>
     """, unsafe_allow_html=True)
     
-    if st.button("⚡ CLICK HERE TO HARVEST COINS ⚡", key="harvest_text_btn_v150", use_container_width=True):
+    if st.button("⚡ TAPPING ALTERNATIVE HARVESTER ⚡", key="harvest_text_btn_v151", use_container_width=True):
         if energy >= 10:
             energy -= 10
             coins += (40 * level * tractor_multiplier)
@@ -235,7 +238,7 @@ if active_panel == "🎯 MINE":
             st.toast(f"🪙 +{40 * level * tractor_multiplier} Coins Harvested!", icon="🚜")
             st.rerun()
         else:
-            st.error("❌ Out of Energy! Move tabs or refresh to auto-charge instantly!")
+            st.error("❌ Out of Energy! Keep resting or refresh to auto-charge!")
 
 elif active_panel == "🚀 BOOST":
     st.markdown("### 🚀 Premium Booster Engine")
@@ -247,7 +250,7 @@ elif active_panel == "🚀 BOOST":
         </div>
     """, unsafe_allow_html=True)
     
-    if st.button("🔓 Open Premium Mystery Box (1,000 Coins)", key="crate_v150", use_container_width=True):
+    if st.button("🔓 Open Premium Mystery Box (1,000 Coins)", key="crate_v151", use_container_width=True):
         if coins >= 1000:
             coins -= 1000
             prize = random.choice([2000, 5000, 15000])
@@ -273,7 +276,7 @@ elif active_panel == "🚀 BOOST":
     st.divider()
     st.markdown("### 🚜 Upgrade Tractor Upgrades")
     
-    # Iron upgrade
+    # Iron Upgrade
     st.markdown(f"""
         <div class="action-module-row-card">
             <div>
@@ -296,7 +299,7 @@ elif active_panel == "🚀 BOOST":
             else:
                 st.error("❌ Insufficient coins!")
                 
-    # Cyber upgrade
+    # Cyber Upgrade
     st.markdown(f"""
         <div class="action-module-row-card">
             <div>
@@ -353,19 +356,19 @@ elif active_panel == "📜 QUESTS":
     st.divider()
     st.markdown("### 📜 Social Media Missions")
     
-    # 1. Telegram Task Box
+    # 1. Telegram
     if st.session_state.tg_claimed:
         st.markdown("<div class='action-module-row-card'><div><b>✅ Join Official Telegram Channel</b></div><div style='color:#4caf50;'>Claimed</div></div>", unsafe_allow_html=True)
     else:
         st.markdown("<div class='action-module-row-card'><div><b>📢 Join Official Telegram Channel</b></div><div class='module-card-cost-index'>+50,000</div></div>", unsafe_allow_html=True)
         
         st.markdown('<a href="https://t.me/telegram" target="_blank" class="web3-link-driver-btn">📢 STAGE 1: Open Telegram Channel</a>', unsafe_allow_html=True)
-        if st.button("🔄 STAGE 2: Click to Verify Channel Visit", key="v_tg_v150", use_container_width=True):
+        if st.button("🔄 STAGE 2: Click to Verify Channel Visit", key="v_tg_v151", use_container_width=True):
             st.session_state.tg_visited = True
             st.toast("Telegram redirection verified! Stage 3 unlocked.", icon="🔓")
             
         if st.session_state.tg_visited:
-            if st.button("⚡ STAGE 3: Verify & Claim +50K Coins", key="claim_tg_v150", use_container_width=True):
+            if st.button("⚡ STAGE 3: Verify & Claim +50K Coins", key="claim_tg_v151", use_container_width=True):
                 coins += 50000
                 db.execute("UPDATE users SET coins = ? WHERE id = ?", (coins, USER_ID))
                 conn.commit()
@@ -375,19 +378,19 @@ elif active_panel == "📜 QUESTS":
                 
     st.write("") 
     
-    # 2. YouTube Task Box
+    # 2. YouTube
     if st.session_state.yt_claimed:
         st.markdown("<div class='action-module-row-card'><div><b>✅ Subscribe YouTube Channel</b></div><div style='color:#4caf50;'>Claimed</div></div>", unsafe_allow_html=True)
     else:
         st.markdown("<div class='action-module-row-card'><div><b>📺 Subscribe YouTube Channel</b></div><div class='module-card-cost-index'>+40,000</div></div>", unsafe_allow_html=True)
         
         st.markdown('<a href="https://www.youtube.com" target="_blank" class="web3-link-driver-btn-yt">📺 STAGE 1: Open YouTube Channel</a>', unsafe_allow_html=True)
-        if st.button("🔄 STAGE 2: Click to Verify Subscription Trace", key="v_yt_v150", use_container_width=True):
+        if st.button("🔄 STAGE 2: Click to Verify Subscription Trace", key="v_yt_v151", use_container_width=True):
             st.session_state.yt_visited = True
             st.toast("YouTube action trace verified! Stage 3 unlocked.", icon="🔓")
             
         if st.session_state.yt_visited:
-            if st.button("⚡ STAGE 3: Verify & Claim +40K Coins", key="claim_yt_v150", use_container_width=True):
+            if st.button("⚡ STAGE 3: Verify & Claim +40K Coins", key="claim_yt_v151", use_container_width=True):
                 coins += 40000
                 db.execute("UPDATE users SET coins = ? WHERE id = ?", (coins, USER_ID))
                 conn.commit()
