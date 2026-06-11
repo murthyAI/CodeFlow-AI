@@ -7,19 +7,23 @@ from datetime import datetime
 # --- APP CONFIG ---
 st.set_page_config(page_title="Village Mining AI", page_icon="🌾", layout="centered")
 
-# --- v15.3 PREMIUM GRAND WALLPAPER & HIGH-END UI CSS ---
+# --- v15.4 MASTER FORCED PREMIUM WALLPAPER & GIANT NODE CSS ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght=700;900&family=Urbanist:wght=600;800;900&display=swap');
     
-    html, body, [class*="st-"] { font-family: 'Urbanist', sans-serif; background-color: #000000; color: #ffffff; }
+    /* 1. FORCED NATIVE BACKGROUND WALLPAPER WITH OVERRIDE */
+    html, body, [class*="st-"] { 
+        font-family: 'Urbanist', sans-serif !important; 
+        background-color: #000000 !important; 
+        color: #ffffff !important; 
+    }
     
-    /* HAMSTER / X-EMPIRE STYLE PREMIUM AGRITECH CYBER NEON BACKGROUND WALLPAPER */
     .stApp { 
         background: 
-            radial-gradient(circle at 50% 10%, rgba(76, 175, 80, 0.22) 0%, rgba(0,0,0,0) 50%),
-            radial-gradient(circle at 20% 80%, rgba(33, 150, 243, 0.1) 0%, rgba(0,0,0,0) 40%),
-            linear-gradient(180deg, #020b02 0%, #051405 30%, #000000 100%) !important;
+            radial-gradient(circle at 50% 15%, rgba(56, 142, 60, 0.3) 0%, rgba(0,0,0,0) 60%),
+            radial-gradient(circle at 80% 80%, rgba(2, 136, 209, 0.15) 0%, rgba(0,0,0,0) 50%),
+            linear-gradient(180deg, #020f02 0%, #041204 40%, #000000 100%) !important;
         background-attachment: fixed !important;
     }
     
@@ -34,32 +38,37 @@ st.markdown("""
     }
     .profile-img-frame { width: 42px; height: 42px; border-radius: 50%; border: 2px solid #ffd700; background: #111; text-align: center; line-height: 38px; font-size: 20px; }
     .dashboard-stats-grid { display: flex; gap: 8px; margin-bottom: 15px; }
-    .dashboard-stat-unit { background: rgba(10,20,10,0.85); border: 1px solid rgba(76, 175, 80, 0.2); border-radius: 14px; padding: 10px; flex: 1; text-align: center; backdrop-filter: blur(5px); }
+    .dashboard-stat-unit { background: rgba(10,25,10,0.85); border: 1px solid rgba(76, 175, 80, 0.25); border-radius: 14px; padding: 10px; flex: 1; text-align: center; backdrop-filter: blur(5px); }
     .dashboard-stat-val { font-size: 0.9rem; font-weight: 900; color: #ffd700; font-family: 'Orbitron'; }
-    .dashboard-stat-lbl { font-size: 0.55rem; color: #aaa; font-weight: bold; }
+    .dashboard-stat-lbl { font-size: 0.55rem; color: #bbb; font-weight: bold; }
     .grand-token-display { text-align: center; margin: 10px 0; }
     .grand-token-val { font-size: 3.5rem; font-weight: 900; color: #ffd700; font-family: 'Orbitron'; text-shadow: 0 0 25px rgba(255,215,0,0.6); }
     
-    /* v15.3 FORCED GIANT RESPONSIVE CLICKABLE TRACTOR SHIELD */
+    /* 2. ULTIMATE FORCED FORWARD RESOLUTION GIANT TRACTOR BUTTON BUTTON */
+    div[data-testid="stButton"] button {
+        transition: transform 0.05s ease-in-out !important;
+    }
     div[data-testid="stButton"] button:has(div:contains("🚜")) {
         background: radial-gradient(circle, #388e3c 15%, #1b5e20 85%) !important;
         border: 6px solid #ffd700 !important; 
-        min-width: 230px !important; 
-        min-height: 230px !important; 
+        width: 230px !important; 
+        height: 230px !important; 
+        min-width: 230px !important;
+        min-height: 230px !important;
         max-width: 230px !important;
         max-height: 230px !important;
         border-radius: 50% !important; 
-        margin: 25px auto !important; 
+        margin: 30px auto !important; 
         display: flex !important; 
         justify-content: center !important; 
         align-items: center !important;
         box-shadow: 0 0 60px rgba(76, 175, 80, 0.9), inset 0 0 30px rgba(0,0,0,0.95) !important;
-        transition: transform 0.05s ease-in-out !important; 
         cursor: pointer !important;
     }
     div[data-testid="stButton"] button:has(div:contains("🚜")) div {
-        font-size: 115px !important;
+        font-size: 110px !important;
         line-height: 1 !important;
+        display: block !important;
     }
     div[data-testid="stButton"] button:has(div:contains("🚜")):active { transform: scale(0.90) !important; }
     
@@ -101,8 +110,8 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- DATABASE MASTER ENGINE ---
-conn = sqlite3.connect("village_master_v15.db", check_same_thread=False)
+# --- DATABASE ENGINE (v15.4 FINAL ATOMIC) ---
+conn = sqlite3.connect("village_v15_final_secure.db", check_same_thread=False)
 db = conn.cursor()
 db.execute("""
     CREATE TABLE IF NOT EXISTS users (
@@ -114,45 +123,40 @@ db.execute("""
 """)
 conn.commit()
 
-# Ensure share_done column injection if table exists from prior minute
-try:
-    db.execute("ALTER TABLE users ADD COLUMN share_done INTEGER DEFAULT 0")
-    conn.commit()
-except:
-    pass
-
 USER_ID = "Murthy_Grand_Tycoon"
 row = db.execute("SELECT coins, pph, level, last_claim, streak_count, energy, wallet_address, total_invites, tractor_tier, tg_done, yt_done, combo_done, share_done FROM users WHERE id = ?", (USER_ID,)).fetchone()
 
 if not row:
+    # మీ ప్రస్తుత పాయింట్స్ ఏమీ లాస్ అవ్వకుండా కరెక్ట్ గా సింక్ చేశాను
     db.execute("INSERT INTO users VALUES (?, 1410805, 900, 3, '', 1, 500, '', 0, 'Cyber Tractor', 0, 0, 0, 0)", (USER_ID,))
     conn.commit()
     coins, pph, level, last_claim, streak_count, energy, wallet_address, total_invites, tractor_tier, tg_done, yt_done, combo_done, share_done = 1410805, 900, 3, "", 1, 500, "", 0, "Cyber Tractor", 0, 0, 0, 0
 else:
     coins, pph, level, last_claim, streak_count, energy, wallet_address, total_invites, tractor_tier, tg_done, yt_done, combo_done, share_done = row
 
-# Full Energy Fallback
-if energy is None or energy < 0:
+# v15.4 Full Energy Core Guard Fix
+if energy is None or energy <= 0:
     energy = 500
+    db.execute("UPDATE users SET energy = 500 WHERE id = ?", (USER_ID,))
+    conn.commit()
 
-# Cache configurations
+# Session Cache Init
 if "won_reward" not in st.session_state: st.session_state.won_reward = None
 if "tg_visited" not in st.session_state: st.session_state.tg_visited = False
 if "yt_visited" not in st.session_state: st.session_state.yt_visited = False
 
-# --- v15.3 SHATHAKOTLA (BILLIONS) SUPREME ECONOMY ENGINE ---
+# --- SHATHAKOTLA (5 BILLIONS) ECO TIERS LAWS ---
 if coins < 100000: level = 1
 elif coins < 1000000: level = 2
 elif coins < 5000000: level = 3
-elif coins < 20000000: level = 4          # 2 Crores
-elif coins < 100000000: level = 5         # 10 Crores
-elif coins < 250000000: level = 6         # 25 Crores
-elif coins < 500000000: level = 7         # 50 Crores
-elif coins < 1000000000: level = 8        # 100 Crores / 1 Billion
-elif coins < 2500000000: level = 9        # 250 Crores / 2.5 Billions
-else: level = 10                          # 500 Crores / 5 Billions
+elif coins < 20000000: level = 4          
+elif coins < 100000000: level = 5         
+elif coins < 250000000: level = 6         
+elif coins < 500000000: level = 7         
+elif coins < 1000000000: level = 8        
+elif coins < 2500000000: level = 9        
+else: level = 10                          
 
-# Dynamically mapping milestones boundaries
 level_targets = [0, 100000, 1000000, 5000000, 20000000, 100000000, 250000000, 500000000, 1000000000, 2500000000, 5000000000]
 next_target = level_targets[level]
 points_needed = max(0, next_target - coins)
@@ -164,7 +168,7 @@ tractor_multiplier = 1
 if tractor_tier == "Iron Tractor": tractor_multiplier = 2
 elif tractor_tier == "Cyber Tractor": tractor_multiplier = 4
 
-# --- AIRDROP COUNTDOWN FIXED TO NOVEMBER 10, 2026 ---
+# --- AIRDROP FIXED TO NOVEMBER 10, 2026 ---
 launch_target_date = datetime(2026, 11, 10)  
 current_time_now = datetime.now()
 days_remaining = max(0, (launch_target_date - current_time_now).days)
@@ -186,7 +190,7 @@ st.markdown(f"""
     </div>
 """, unsafe_allow_html=True)
 
-# --- STATS ROW ---
+# --- STATS BLOCK ---
 st.markdown(f"""
     <div class="dashboard-stats-grid">
         <div class="dashboard-stat-unit"><div class="dashboard-stat-lbl">PROFIT / HOUR</div><div class="dashboard-stat-val">⚡ +{pph:,}</div></div>
@@ -197,7 +201,7 @@ st.markdown(f"""
 
 st.markdown(f'<div class="grand-token-display"><div class="grand-token-val">🪙 {coins:,}</div></div>', unsafe_allow_html=True)
 
-# --- NAVIGATION TABS ---
+# --- NAVIGATION CONTROLLER ---
 active_panel = st.segmented_control("Nav", ["🎯 MINE", "🚀 BOOST", "📜 QUESTS", "🏆 FRENZ", "💎 DROP"], selection_mode="single", default="🎯 MINE", label_visibility="collapsed")
 st.divider()
 
@@ -215,8 +219,8 @@ if active_panel == "🎯 MINE":
         
     st.progress(progress_bar_val / 100)
     
-    # v15.3 STABLE GIANT CLICKABLE TRACTOR TRIGGER NODE
-    if st.button("🚜", key="supreme_giant_tapper_v153", use_container_width=True):
+    # v15.4 CORE FORCED NATIVE SUPREME GIANT CLICK ACTION TAP
+    if st.button("🚜", key="supreme_giant_tapper_v154", use_container_width=True):
         if energy >= 10:
             energy -= 10
             coins += (40 * level * tractor_multiplier)
@@ -231,7 +235,7 @@ if active_panel == "🎯 MINE":
         </div>
     """, unsafe_allow_html=True)
     
-    if st.button("⚡ TAP HERE TO HARVEST COINS ⚡", key="text_harvester_v153", use_container_width=True):
+    if st.button("⚡ TAP HERE TO HARVEST COINS ⚡", key="text_harvester_v154", use_container_width=True):
         if energy >= 10:
             energy -= 10
             coins += (40 * level * tractor_multiplier)
@@ -240,7 +244,7 @@ if active_panel == "🎯 MINE":
             st.toast(f"🪙 +{40 * level * tractor_multiplier} Coins Harvested!", icon="🚜")
             st.rerun()
         else:
-            st.error("❌ Out of Energy! Move tabs or refresh to instantly auto-charge!")
+            st.error("❌ Out of Energy! Move tabs to refresh and auto-charge instantly!")
 
 elif active_panel == "🚀 BOOST":
     st.markdown("### 🚀 Premium Booster Engine")
@@ -252,7 +256,7 @@ elif active_panel == "🚀 BOOST":
         </div>
     """, unsafe_allow_html=True)
     
-    if st.button("🔓 Open Premium Mystery Box (1,000 Coins)", key="crate_v153", use_container_width=True):
+    if st.button("🔓 Open Premium Mystery Box (1,000 Coins)", key="crate_v154", use_container_width=True):
         if coins >= 1000:
             coins -= 1000
             prize = random.choice([2000, 5000, 15000])
@@ -359,18 +363,18 @@ elif active_panel == "📜 QUESTS":
     st.divider()
     st.markdown("### 📜 Social Media Missions")
     
-    # 1. Telegram Task (Database Locked Forever)
+    # Telegram Task
     if tg_done == 1:
         st.markdown("<div class='action-module-row-card'><div><b>✅ Join Official Telegram Channel</b></div><div style='color:#4caf50; font-weight:bold;'>Claimed Forever</div></div>", unsafe_allow_html=True)
     else:
         st.markdown("<div class='action-module-row-card'><div><b>📢 Join Official Telegram Channel</b></div><div class='module-card-cost-index'>+50,000</div></div>", unsafe_allow_html=True)
         st.markdown('<a href="https://t.me/telegram" target="_blank" class="web3-link-driver-btn">📢 STAGE 1: Open Telegram Channel</a>', unsafe_allow_html=True)
-        if st.button("🔄 STAGE 2: Click to Verify Channel Visit", key="v_tg_v153", use_container_width=True):
+        if st.button("🔄 STAGE 2: Click to Verify Channel Visit", key="v_tg_v154", use_container_width=True):
             st.session_state.tg_visited = True
             st.toast("Telegram redirection verified! Stage 3 unlocked.", icon="🔓")
             
         if st.session_state.tg_visited:
-            if st.button("⚡ STAGE 3: Verify & Claim +50K Coins", key="claim_tg_v153", use_container_width=True):
+            if st.button("⚡ STAGE 3: Verify & Claim +50K Coins", key="claim_tg_v154", use_container_width=True):
                 coins += 50000
                 db.execute("UPDATE users SET coins = ?, tg_done = 1 WHERE id = ?", (coins, USER_ID))
                 conn.commit()
@@ -379,18 +383,18 @@ elif active_panel == "📜 QUESTS":
                 
     st.write("") 
     
-    # 2. YouTube Task (Database Locked Forever)
+    # YouTube Task
     if yt_done == 1:
         st.markdown("<div class='action-module-row-card'><div><b>✅ Subscribe YouTube Channel</b></div><div style='color:#4caf50; font-weight:bold;'>Claimed Forever</div></div>", unsafe_allow_html=True)
     else:
         st.markdown("<div class='action-module-row-card'><div><b>📺 Subscribe YouTube Channel</b></div><div class='module-card-cost-index'>+40,000</div></div>", unsafe_allow_html=True)
         st.markdown('<a href="https://www.youtube.com" target="_blank" class="web3-link-driver-btn-yt">📺 STAGE 1: Open YouTube Channel</a>', unsafe_allow_html=True)
-        if st.button("🔄 STAGE 2: Click to Verify Subscription Trace", key="v_yt_v153", use_container_width=True):
+        if st.button("🔄 STAGE 2: Click to Verify Subscription Trace", key="v_yt_v154", use_container_width=True):
             st.session_state.yt_visited = True
             st.toast("YouTube action trace verified! Stage 3 unlocked.", icon="🔓")
             
         if st.session_state.yt_visited:
-            if st.button("⚡ STAGE 3: Verify & Claim +40K Coins", key="claim_yt_v153", use_container_width=True):
+            if st.button("⚡ STAGE 3: Verify & Claim +40K Coins", key="claim_yt_v154", use_container_width=True):
                 coins += 40000
                 db.execute("UPDATE users SET coins = ?, yt_done = 1 WHERE id = ?", (coins, USER_ID))
                 conn.commit()
@@ -399,7 +403,7 @@ elif active_panel == "📜 QUESTS":
 
     st.divider()
     
-    # 3. DAILY COMBO BOX (DATABASE ANTI-REPEATED HACK LOCK)
+    # 3. DAILY COMBO BOX
     st.markdown("### 🔑 Channel Daily Combo Code")
     if combo_done == 1:
         st.success("🎉 You have already claimed today's Daily Combo! Come back tomorrow.")
@@ -430,7 +434,6 @@ elif active_panel == "🏆 FRENZ":
     
     st.text_input("Your Custom Telegram Referral Link", value=f"https://t.me/VillageMiningAI_bot?start=ref_{USER_ID}", disabled=True)
     
-    # v15.3 ANTI-HACK SHARING ENGINE LOCK (ONE-TIME BONUS PREVENTS LOOPS)
     if share_done == 1:
         if st.button("🔗 SHARE REFERRAL LINK", use_container_width=True):
             st.toast("Referral code copied safely to clipboard!", icon="🚀")
